@@ -1,11 +1,11 @@
 import { Routes } from '@angular/router';
-import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { ErrorComponent } from './components/error/error.component';
+import { LogoutComponent } from './components/logout/logout.component';
 
 export const routes: Routes = [
     {
-        path: 'dashboard',
-        component: DashboardComponent
+        path: 'logout',
+        component: LogoutComponent
     },
     {
         path: '**',

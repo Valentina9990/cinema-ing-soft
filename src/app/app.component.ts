@@ -13,10 +13,10 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 export class AppComponent {
   title = 'Cine';
   pages = [
-    { name: 'Dashboard', path: 'dashboard', icon: 'fas fa-home'},
-    { name: 'Peliculas', path: 'movies', icon: 'fas fa-home'},
+    { name: 'Funciones', path: 'functions', icon: 'fas fa-camera'},
+    { name: 'Peliculas', path: 'movies', icon: 'fas fa-film'},
     { name: 'Salas', path: 'rooms', icon: 'fas fa-home'},
-    { name: 'Comidas', path: 'foods', icon: 'fas fa-home'},
-    { name: 'Funciones', path: 'functions', icon: 'fas fa-home'},
+    { name: 'Comidas', path: 'foods', icon: 'fas fa-utensils'},
+    { name: 'Usuarios', path: 'users', icon: 'fas fa-user'},
   ];
 }
