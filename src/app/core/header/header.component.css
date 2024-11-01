@@ -1,10 +1,11 @@
 .form-control{
     background-color: #3f3f3f;
     border-radius: 8px !important;
+    color: #ccc;
+    opacity: 1;
 }
 input::placeholder {
     padding-left: 5px;
     color: #ccc;
     opacity: 1;
-  }
-  
+}
