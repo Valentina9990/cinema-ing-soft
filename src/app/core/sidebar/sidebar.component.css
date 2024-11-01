@@ -1,0 +1,28 @@
+.sidebar-nav {
+    height: 100%;
+    background-color: #f8f9fa;
+    padding: 1rem;
+  }
+  
+  .sidebar-content {
+    position: sticky;
+    top: 0;
+  }
+  
+  .nav-link {
+    color: #333;
+    padding: 0.5rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .nav-link:hover {
+    background-color: #e9ecef;
+    border-radius: 4px;
+  }
+  
+  .nav-link i {
+    width: 20px;
+    text-align: center;
+  }

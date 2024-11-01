@@ -66,10 +66,12 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "cinema:build:production"
+              "buildTarget": "cinema:build:production",
+              "port": 8070
             },
             "development": {
-              "buildTarget": "cinema:build:development"
+              "buildTarget": "cinema:build:development",
+              "port": 8071
             }
           },
           "defaultConfiguration": "development"

@@ -1,0 +1,10 @@
+.form-control{
+    background-color: #3f3f3f;
+    border-radius: 8px !important;
+}
+input::placeholder {
+    padding-left: 5px;
+    color: #ccc;
+    opacity: 1;
+  }
+  
