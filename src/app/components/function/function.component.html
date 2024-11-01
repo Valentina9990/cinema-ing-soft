@@ -1,0 +1,32 @@
+<div class="container mt-5">
+  <div *ngIf="functionData" class="card mb-4">
+    <div class="row g-0">
+      <div class="col-md-4">
+        <img
+          [src]="functionData.thumbnail"
+          class="img-fluid rounded-start"
+          alt="{{ functionData.title }}"
+        />
+      </div>
+      <div class="col-md-8">
+        <div class="card-body">
+          <h2 class="card-title">{{ functionData.title }}</h2>
+
+          <p class="card-text">{{ functionData.description }}</p>
+
+          <h5 class="mt-4">Horario:</h5>
+          <ul class="list-group">
+            <li
+              *ngFor="let schedule of functionData.schedule"
+              class="list-group-item"
+            >
+              {{ schedule.day }} - {{ schedule.time }}
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <a [routerLink]="'/functions'" class="btn btn-primary mt-3">Regresar</a>
+</div>
