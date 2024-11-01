@@ -1,0 +1,24 @@
+<div class="row row-cols-1 row-cols-md-3 g-4 m-2">
+  <div class="col" *ngFor="let function of functions">
+    <a
+      [routerLink]="['/functions', function.id]"
+      class="card-link"
+      style="text-decoration: none"
+    >
+      <div class="card">
+        <img
+          src="{{ function.thumbnail }}"
+          class="card-img-top"
+          alt="{{ function.title }}"
+          height="450px"
+        />
+        <div class="card-body">
+          <h5 class="card-title">{{ function.title }}</h5>
+          <p class="card-text">
+            {{ function.description | slice : 0 : 300 }}...
+          </p>
+        </div>
+      </div>
+    </a>
+  </div>
+</div>

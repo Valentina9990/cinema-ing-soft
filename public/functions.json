@@ -1,0 +1,35 @@
+[
+  {
+    "id": 1,
+    "title": "El resplandor",
+    "description": "Jack Torrance se traslada con su mujer y su hijo de siete años al impresionante hotel Overlook, en Colorado, para encargarse del mantenimiento de las instalaciones durante la temporada invernal, época en la que permanece cerrado y aislado por la nieve. Su objetivo es encontrar paz y sosiego para escribir una novela. Sin embargo, poco después de su llegada al hotel, al mismo tiempo que Jack empieza a padecer inquietantes trastornos de personalidad, se suceden extraños y espeluznantes fenómenos paranormales.",
+    "thumbnail": "el-resplandor.jpg",
+    "trailer": "https://www.youtube.com/watch?v=5Cb3ik6zP2I",
+    "schedule": [
+      { "day": "Lunes", "time": "22:00" },
+      { "day": "Martes", "time": "22:00" }
+    ]
+  },
+  {
+    "id": 2,
+    "title": "El Silencio Inocentes",
+    "description": "El FBI busca a 'Buffalo Bill', un asesino en serie que mata a sus víctimas, todas adolescentes, después de prepararlas minuciosamente y arrancarles la piel. Para poder atraparlo recurren a Clarice Starling, una brillante licenciada universitaria, experta en conductas psicópatas, que aspira a formar parte del FBI. Siguiendo las instrucciones de su jefe, Jack Crawford, Clarice visita la cárcel de alta seguridad donde el gobierno mantiene encerrado al Dr. Hannibal Lecter, antiguo psicoanalista y asesino, dotado de una inteligencia superior a la normal. Su misión será intentar sacarle información sobre los patrones de conducta del asesino que están buscando.",
+    "thumbnail": "el-silencio-inocentes.webp",
+    "trailer": "https://www.youtube.com/watch?v=W6Mm8Sbe__o",
+    "schedule": [
+      { "day": "Miércoles", "time": "22:00" },
+      { "day": "Jueves", "time": "22:00" }
+    ]
+  },
+  {
+    "id": 3,
+    "title": "El conjuro",
+    "description": "Basada en hechos reales. Narra los encuentros sobrenaturales que vivió la familia Perron en su casa de Rhode Island a principios de los 70. Ed y Lorraine Warren, investigadores de renombre en el mundo de los fenómenos paranormales, acuden a la llamada de una familia aterrorizada por la presencia en su granja de un ser maligno.",
+    "thumbnail": "el-conjuro.png",
+    "trailer": "https://www.youtube.com/watch?v=k10ETZ41q5o",
+    "schedule": [
+      { "day": "Viernes", "time": "22:00" },
+      { "day": "Sábado", "time": "22:00" }
+    ]
+  }
+]
