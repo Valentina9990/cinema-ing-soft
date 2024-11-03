@@ -4,6 +4,7 @@ import { FunctionsComponent } from './components/functions/functions.component';
 import { UsersComponent } from './components/users/users.component';
 import { ErrorComponent } from './core/error/error.component';
 import { LogoutComponent } from './core/logout/logout.component';
+import { MoviesComponent } from './components/movies/movies.component';
 
 export const routes: Routes = [
     {
@@ -21,6 +22,10 @@ export const routes: Routes = [
     {
         path: 'functions/:id',
         component: FunctionComponent
+    },
+    {
+        path: 'movies',
+        component: MoviesComponent
     },
     {
         path: '**',
