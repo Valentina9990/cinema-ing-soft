@@ -17,6 +17,10 @@ export const routes: Routes = [
         component: UsersComponent
     },
     {
+        path: 'cine',
+        component: CineComponent
+    },
+    {
         path: 'functions',
         component: FunctionsComponent
     },
