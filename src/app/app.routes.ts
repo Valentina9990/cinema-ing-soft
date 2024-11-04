@@ -6,6 +6,7 @@ import { ErrorComponent } from './core/error/error.component';
 import { LogoutComponent } from './core/logout/logout.component';
 import { ComidaComponent } from './components/comida/comida.component';
 import { MoviesComponent } from './components/movies/movies.component';
+import { CineComponent } from './components/cine/cine.component';
 
 export const routes: Routes = [
     {
