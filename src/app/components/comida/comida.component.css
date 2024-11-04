@@ -1,0 +1,53 @@
+/* Estilos generales para la estructura */
+
+
+/* Estilo para los headers */
+.concessions-block__header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #384450;
+    border: 2px solid #3b3f44;
+    color: #fff;
+    font-weight: bold;
+    font-size: 1.5em;
+    padding: 15px;
+    margin: 20px 0;
+    border-radius: 10px;
+    text-align: center;
+    text-transform: uppercase;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+
+
+/* Estilo para las tarjetas */
+
+
+/* Imagen dentro de las tarjetas */
+
+
+/* Estilo para los nombres dentro de las tarjetas */
+.candy-store__name {
+    font-size: 1.2em;
+    margin-top: 10px;
+    color: #333;
+    font-weight: bold;
+    text-align: center;
+}
+
+
+
+/* Estilo para los botones dentro de las tarjetas */
+.btn-group .btn {
+    color: #555;
+    font-weight: bold;
+    border-radius: 5px;
+    padding: 5px 15px;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.btn-group .btn:hover {
+    background-color: #585249;
+    color: #fff;
+}
