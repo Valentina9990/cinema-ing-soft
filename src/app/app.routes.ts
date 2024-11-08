@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { FunctionComponent } from './components/function/function.component';
+import { FunctionComponent } from './components/functions/function/function.component';
 import { FunctionsComponent } from './components/functions/functions.component';
 import { UsersComponent } from './components/users/users.component';
 import { ErrorComponent } from './core/error/error.component';
