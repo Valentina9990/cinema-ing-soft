@@ -1,21 +1,21 @@
 <div class="row row-cols-1 row-cols-md-3 g-4 m-2">
-  <div class="col" *ngFor="let function of functions">
+  <div class="col" *ngFor="let movie of movies">
     <a
-      [routerLink]="['/functions', function.id]"
+      [routerLink]="['/functions', movie.idPelicula]"
       class="card-link"
       style="text-decoration: none"
     >
       <div class="card">
         <img
-          src="{{ function.thumbnail }}"
+          src="{{ movie.thumbnail }}"
           class="card-img-top"
-          alt="{{ function.title }}"
+          alt="{{ movie.nombrePelicula }}"
           height="450px"
         />
         <div class="card-body">
-          <h5 class="card-title">{{ function.title }}</h5>
+          <h5 class="card-title">{{ movie.nombrePelicula }}</h5>
           <p class="card-text">
-            {{ function.description | slice : 0 : 300 }}...
+            {{ movie.sinopsisPelicula | slice : 0 : 300 }}...
           </p>
         </div>
       </div>

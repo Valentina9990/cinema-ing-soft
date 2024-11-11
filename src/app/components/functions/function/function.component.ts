@@ -1,26 +1,40 @@
 import { NgFor, NgIf } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
+import { Movie } from '../../../interfaces/movie';
+import { DatePipe } from "../../../pipes/date.pipe";
+import { MoviesService } from '../../../services/api/movies.service';
 
 @Component({
   selector: 'app-function',
   standalone: true,
-  imports: [NgIf, RouterModule, NgFor],
+  imports: [NgIf, RouterModule, NgFor, DatePipe],
   templateUrl: './function.component.html',
-  styleUrl: './function.component.css'
+  styleUrl: './function.component.css',
 })
 export class FunctionComponent {
-  functionData: any = null;
-  functionId: number | null = null;
+  movie: Movie | null = null;
 
-  constructor(private route: ActivatedRoute, private http: HttpClient) {}
+  constructor(private route: ActivatedRoute, private moviesService: MoviesService) {}
 
   ngOnInit(): void {
-    this.functionId = Number(this.route.snapshot.paramMap.get('id'));
+    const movieId = Number(this.route.snapshot.paramMap.get('id'));
 
-    this.http.get<any[]>('functions.json').subscribe((data: any[]) => {
-      this.functionData = data.find(f => f.id === this.functionId);
-    });
+    if (movieId) {
+      this.loadFunction(movieId);
+    }
   }
+
+  loadFunction(movieId: number): void {
+    this.moviesService.getMovie(movieId).subscribe(data => {
+      data.funciones.sort((a, b) => {
+        const dateWithTimeA = new Date(`${a.fechaFuncion.split('T')[0]}T${a.horaInicioFuncion}`);
+        const dateWithTimeB = new Date(`${b.fechaFuncion.split('T')[0]}T${b.horaInicioFuncion}`);
+        
+        return dateWithTimeA.getTime() - dateWithTimeB.getTime();
+      });
+      
+      this.movie = data;
+    });
+  }  
 }
