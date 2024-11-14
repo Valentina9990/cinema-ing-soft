@@ -1,7 +1,7 @@
 <div class="row row-cols-1 row-cols-md-3 g-4 m-2">
   <div class="col" *ngFor="let movie of movies">
     <a
-      [routerLink]="['/functions', movie.idPelicula]"
+      [routerLink]="['/showtimes', movie.idPelicula]"
       class="card-link"
       style="text-decoration: none"
     >

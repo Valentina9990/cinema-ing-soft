@@ -6,22 +6,22 @@ import { Movie } from '../../interfaces/movie';
 import { MoviesService } from '../../services/api/movies.service';
 
 @Component({
-  selector: 'app-functions',
+  selector: 'app-showtimes',
   standalone: true,
   imports: [NgFor, SlicePipe, RouterModule],
-  templateUrl: './functions.component.html',
-  styleUrl: './functions.component.css',
+  templateUrl: './showtimes.component.html',
+  styleUrl: './showtimes.component.css',
 })
-export class FunctionsComponent {
+export class ShowtimesComponent {
   movies: Movie[] = [];
 
   constructor(private http: HttpClient, private moviesService: MoviesService) {}
 
   ngOnInit(): void {
-    this.loadFunctions();
+    this.loadshowtimes();
   }
 
-  loadFunctions(): void {
+  loadshowtimes(): void {
     this.moviesService.getMovies().subscribe(data => {
       this.movies = data.filter((movie: Movie) => movie.funciones.length > 0);
     }); 

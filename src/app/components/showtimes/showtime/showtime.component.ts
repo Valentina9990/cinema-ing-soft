@@ -6,13 +6,13 @@ import { DatePipe } from "../../../pipes/date.pipe";
 import { MoviesService } from '../../../services/api/movies.service';
 
 @Component({
-  selector: 'app-function',
+  selector: 'app-showtime',
   standalone: true,
   imports: [NgIf, RouterModule, NgFor, DatePipe],
-  templateUrl: './function.component.html',
-  styleUrl: './function.component.css',
+  templateUrl: './showtime.component.html',
+  styleUrl: './showtime.component.css',
 })
-export class FunctionComponent {
+export class ShowtimeComponent {
   movie: Movie | null = null;
 
   constructor(private route: ActivatedRoute, private moviesService: MoviesService) {}
@@ -21,11 +21,11 @@ export class FunctionComponent {
     const movieId = Number(this.route.snapshot.paramMap.get('id'));
 
     if (movieId) {
-      this.loadFunction(movieId);
+      this.loadshowtime(movieId);
     }
   }
 
-  loadFunction(movieId: number): void {
+  loadshowtime(movieId: number): void {
     this.moviesService.getMovie(movieId).subscribe(data => {
       data.funciones.sort((a, b) => {
         const dateWithTimeA = new Date(`${a.fechaFuncion.split('T')[0]}T${a.horaInicioFuncion}`);
