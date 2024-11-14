@@ -23,4 +23,28 @@ export class MoviesService {
   getMovie(idPelicula: number): Observable<Movie> {
     return this.http.get<Movie>(`${this.baseUrl}/${idPelicula}`);
   }
+
+  addMovie(movie: Partial<Movie>): Observable<Movie> {
+    return this.http.post<Movie>(this.baseUrl, movie);
+  }
+
+
+
+  updateMovie(idPelicula: number, movie: Partial<Movie>): Observable<Movie> {
+    return this.http.put<Movie>(`${this.baseUrl}/${idPelicula}`, movie);
+  }
+
+  searchMovies(search: string): Observable<Movie[]> {
+    const params = new HttpParams().set('search', search);
+
+    return this.http.get<Movie[]>(this.baseUrl, { params });
+  }
+
+  updateMovieById(idPelicula: number, movie: Partial<Movie>): Observable<Movie> {
+    return this.http.put<Movie>(`${this.baseUrl}/${idPelicula}`, movie);
+  }
+
+  deleteMovieById(idPelicula: number): Observable<any> {
+    return this.http.delete(`${this.baseUrl}/${idPelicula}`);
+  }
 }
