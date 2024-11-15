@@ -1,87 +1,141 @@
-<div >
-    <div class="row row-cols-2 row-cols-md-4 g-4">
-        <div class="col">
-          <div class="card h-100">
-            <img src="suzume.jpg" class="card-img-top" alt="...">
-            <div class="card-body">
-              <h5 class="card-title">Suzume no Tojimari</h5>
-              <p class="card-text">Un viaje mágico a través de un mundo lleno de puertas misteriosas, donde una joven descubre su propia fuerza y valentía. </p>
-            </div>
-        </div>
+<div class="container">
+  <!-- Botón para agregar una nueva película -->
+  <div class="row mb-4 mt-3">
+    <div class="col-12 text-center mb-3">
+      <h1 class="mb-4">Películas</h1>
     </div>
-    <div class="col">
-          <div class="card h-100">
-            <img src="coraline.jpg" class="card-img-top" alt="...">
-            <div class="card-body">
-              <h5 class="card-title">Coraline</h5>
-              <p class="card-text">Una niña curiosa encuentra un mundo alternativo que parece perfecto, pero oculta oscuros secretos que amenazan su vida y la de su familia.</p>
-            </div>
+    <div class="col-12 col-md-8 mx-auto">
+      <div class="input-group mb-3">
+        <span class="input-group-text">
+          <i class="bi bi-search"></i>
+        </span>
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Buscar películas..."
+          [(ngModel)]="searchTerm"
+          (ngModelChange)="onSearch($event)"
+          name="search"
+        />
+        <button
+          class="btn btn-outline-secondary"
+          type="button"
+          (click)="clearSearch()"
+          *ngIf="searchTerm"
+        >
+          <i class="bi bi-x-lg"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mb-4">
+    <div class="col-12 d-flex justify-content-between align-items-center">
+      <div>
+        <span class="text-muted">Total: {{ totalMovies }} películas</span>
+      </div>
+      <button class="btn btn-primary" (click)="showAddMovieForm()">
+        <i class="bi bi-plus-lg me-2"></i>Agregar Película
+      </button>
+    </div>
+  </div>
+
+
+  <div *ngIf="isEditing || isAdding" class="mb-4">
+    <h5>{{ isEditing ? "Modificar Película" : "Agregar Película" }}</h5>
+    <form (ngSubmit)="isEditing ? updateMovie(currentMovieId!) : addMovie()">
+      <div class="mb-3">
+        <label for="nombrePelicula" class="form-label">Nombre</label>
+        <input
+          type="text"
+          id="nombrePelicula"
+          [(ngModel)]="newMovie.nombrePelicula"
+          name="nombrePelicula"
+          class="form-control"
+          required
+        />
+      </div>
+      <div class="mb-3">
+        <label for="sinopsisPelicula" class="form-label">Sinopsis</label>
+        <textarea
+          id="sinopsisPelicula"
+          [(ngModel)]="newMovie.sinopsisPelicula"
+          name="sinopsisPelicula"
+          class="form-control"
+          required
+        ></textarea>
+      </div>
+      <div class="mb-3">
+        <label for="duracionPelicula" class="form-label">Duración (mins)</label>
+        <input
+          type="number"
+          id="duracionPelicula"
+          [(ngModel)]="newMovie.duracionPelicula"
+          name="duracionPelicula"
+          class="form-control"
+          required
+        />
+      </div>
+      <button type="submit" class="btn btn-success">
+        {{ isEditing ? "Guardar Cambios" : "Agregar" }}
+      </button>
+      <button type="button" class="btn btn-secondary" (click)="cancelEditing()">
+        Cancelar
+      </button>
+    </form>
+  </div>
+
+
+  <div class="row row-cols-2 row-cols-md-4 g-4">
+    <div class="col" *ngFor="let movie of paginatedMovies">
+      <div class="card h-100">
+        <img
+          [src]="movie.thumbnail"
+          class="card-img-top"
+          [alt]="movie.nombrePelicula"
+        />
+        <div class="card-body">
+          <h5 class="card-title">{{ movie.nombrePelicula }}</h5>
+          <p class="card-text">{{ movie.sinopsisPelicula }}</p>
+          <p class="card-text">
+            <small class="text-muted"
+              >Duración: {{ movie.duracionPelicula }} mins</small
+            ><br />
+            <small class="text-muted">Idioma: {{ movie.idioma }}</small>
+          </p>
+
+
+          <div class="d-flex justify-content-between">
+            <button
+              class="btn btn-warning btn-sm"
+              (click)="startEditing(movie)"
+            >
+              Modificar
+            </button>
+            <button
+              class="btn btn-danger btn-sm"
+              (click)="confirmDelete(movie.idPelicula)"
+            >
+              Eliminar
+            </button>
           </div>
         </div>
-    <div class="col">
-          <div class="card h-100">
-            <img src="castillo.jpeg" class="card-img-top" alt="...">
-            <div class="card-body">
-              <h5 class="card-title">El Castillo Vagabundo de Howl</h5>
-              <p class="card-text">Sophie, una joven transformada en anciana por una bruja, se embarca en una aventura mágica con Howl, un mago excéntrico, mientras enfrentan fuerzas oscuras y descubren el poder del amor y la valentía.</p>
-            </div>
-          </div>
+      </div>
     </div>
-    <div class="col">
-        <div class="card h-100">
-          <img src="Haikyu.jpg" class="card-img-top" alt="...">
-          <div class="card-body">
-            <h5 class="card-title">Haikyuu!!</h5>
-            <p class="card-text">La historia de un joven voleibolista que, a pesar de su corta estatura, sueña con ser el mejor jugador, enfrentándose a adversidades y forjando fuertes amistades.</p>
-          </div>
-        </div>
-    </div>
-    <div class="col">
-        <div class="card h-100">
-          <img src="kimetsu.jpg" class="card-img-top" alt="...">
-          <div class="card-body">
-            <h5 class="card-title">Kimetsu no Yaiba</h5>
-            <p class="card-text"> Un joven luchador se convierte en cazador de demonios después de que su familia es asesinada, buscando salvar a su hermana y vengar a su familia.</p>
-          </div>
-        </div>
-    </div>
-    <div class="col">
-        <div class="card h-100">
-          <img src="sustancia.png" class="card-img-top" alt="...">
-          <div class="card-body">
-            <h5 class="card-title">La Sustancia</h5>
-            <p class="card-text">Un grupo de jóvenes se enfrenta a los efectos devastadores de una nueva droga que altera la realidad, explorando temas de amistad, desilusión y la lucha por escapar de un mundo en crisis.</p>
-          </div>
-        </div>
-    </div>
-    <div class="col">
-        <div class="card h-100">
-          <img src="chihiro.png" class="card-img-top" alt="...">
-          <div class="card-body">
-            <h5 class="card-title">El Viaje de Chihiro</h5>
-            <p class="card-text">Una niña se encuentra atrapada en un mundo espiritual y debe encontrar el camino de regreso a casa, enfrentando desafíos y haciendo nuevos amigos.</p>
-          </div>
-        </div>
-    </div>
-    <div class="col">
-        <div class="card h-100">
-          <img src="mononoke.jpg" class="card-img-top" alt="...">
-          <div class="card-body">
-            <h5 class="card-title">La Princesa Mononoke</h5>
-            <p class="card-text">Una épica batalla entre la naturaleza y la industria, donde un joven guerrero se convierte en mediador entre humanos y espíritus del bosque.</p>
-          </div>
-        </div>
-    </div>
-    <div class="col">
-        <div class="card h-100">
-          <img src="belle.jpg" class="card-img-top" alt="...">
-          <div class="card-body">
-            <h5 class="card-title">Belle</h5>
-            <p class="card-text">Una conmovedora historia sobre la búsqueda de la conexión humana en un mundo digital, explorando el amor y la amistad a través de una emocionante narrativa.</p>
-          </div>
-        </div>
-    </div>
-    
-    
-      
+  </div>
+
+</div>
+
+
+<div class="d-flex justify-content-center">
+  <ngb-pagination
+    [collectionSize]="totalMovies"
+    [(page)]="page"
+    [pageSize]="pageSize"
+    (pageChange)="onPageChange($event)"
+    [maxSize]="5"
+    [rotate]="true"
+    [boundaryLinks]="true"
+  >
+  </ngb-pagination>
 </div>

@@ -20,9 +20,14 @@ export class MoviesService {
     return this.http.get<Movie[]>(this.baseUrl, { params });
   }
 
+  getAllMovies(): Observable<Movie[]> {
+    return this.http.get<Movie[]>(`${this.baseUrl}/all`);
+  }
+
   getMovie(idPelicula: number): Observable<Movie> {
     return this.http.get<Movie>(`${this.baseUrl}/${idPelicula}`);
   }
+
 
   addMovie(movie: Partial<Movie>): Observable<Movie> {
     return this.http.post<Movie>(this.baseUrl, movie);

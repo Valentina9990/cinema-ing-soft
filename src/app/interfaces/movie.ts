@@ -2,7 +2,7 @@ import { Genre } from "./genre";
 import { Show } from "./show";
 
 export interface Movie {
-    idPelicula: Number;
+    idPelicula: number;
     nombrePelicula: string;
     idGenero: Number;
     genero: Genre;
