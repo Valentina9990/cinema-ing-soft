@@ -1,8 +1,9 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { API_URL } from '../../utils/domains/URLs';
 import { Observable } from 'rxjs';
-import { User } from '../../core/models/User';
+import { User } from '../../core/models/User.model';
+import { UsersResponse } from '../../core/models/UsersResponse.model';
 
 @Injectable({
   providedIn: 'root'
@@ -12,24 +13,26 @@ export class UserService {
 
   constructor(private http: HttpClient) {}
 
-  getUsers(): Observable<User[]> {
-    return this.http.get<User[]>(`${this.baseUrl}`);
+
+  getUsers(limit: number = 10, offset: number = 0): Observable<UsersResponse> {
+    const params = new HttpParams()
+      .set('limit', limit.toString())
+      .set('offset', offset.toString());
+
+    return this.http.get<UsersResponse>(this.baseUrl, { params });
   }
+  
 
   addUser(user: Omit<User, 'idUsuario' | 'fechaCreacion'>): Observable<User> {
     return this.http.post<User>(`${this.baseUrl}/`, user);
   }
 
-  deleteUsers(): Observable<any> {
-    return this.http.delete(`${this.baseUrl}/`);
+  deleteUser(idUsuario: number): Observable<any> {
+    return this.http.delete(`${this.baseUrl}/${idUsuario}`);
   }
 
-  deleteUserById(userId: number): Observable<any> {
-    return this.http.delete(`${this.baseUrl}/${userId}`);
-  }
-
-  updateUserById(userId: number, user: Omit<User, 'idUsuario'>): Observable<User> {
-    return this.http.put<User>(`${this.baseUrl}/${userId}`, user);
+  updateUser(user: any): Observable<any> {
+    return this.http.put(`${this.baseUrl}`, user);
   }
 }
 
