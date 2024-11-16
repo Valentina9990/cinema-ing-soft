@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { Movie } from '../../../interfaces/movie';
 import { DatePipe } from "../../../pipes/date.pipe";
-import { MoviesService } from '../../../services/api/movies.service';
+import { MovieService } from '../../../services/api/movie.service';
 
 @Component({
   selector: 'app-showtime',
@@ -15,7 +15,7 @@ import { MoviesService } from '../../../services/api/movies.service';
 export class ShowtimeComponent {
   movie: Movie | null = null;
 
-  constructor(private route: ActivatedRoute, private moviesService: MoviesService) {}
+  constructor(private route: ActivatedRoute, private movieService: MovieService) {}
 
   ngOnInit(): void {
     const movieId = Number(this.route.snapshot.paramMap.get('id'));
@@ -26,10 +26,10 @@ export class ShowtimeComponent {
   }
 
   loadshowtime(movieId: number): void {
-    this.moviesService.getMovie(movieId).subscribe(data => {
+    this.movieService.getMovie(movieId).subscribe(data => {
       data.funciones.sort((a, b) => {
-        const dateWithTimeA = new Date(`${a.fechaFuncion.split('T')[0]}T${a.horaInicioFuncion}`);
-        const dateWithTimeB = new Date(`${b.fechaFuncion.split('T')[0]}T${b.horaInicioFuncion}`);
+        const dateWithTimeA = new Date(`${a.fecha_funcion.split('T')[0]}T${a.hora_inicio_funcion}`);
+        const dateWithTimeB = new Date(`${b.fecha_funcion.split('T')[0]}T${b.hora_inicio_funcion}`);
         
         return dateWithTimeA.getTime() - dateWithTimeB.getTime();
       });

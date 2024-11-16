@@ -7,7 +7,7 @@ import { API_URL } from '../../utils/domains/URLs';
 @Injectable({
   providedIn: 'root',
 })
-export class MoviesService {
+export class MovieService {
   private baseUrl = `${API_URL}/movies`;
 
   constructor(private http: HttpClient) {}
@@ -20,7 +20,7 @@ export class MoviesService {
     return this.http.get<Movie[]>(this.baseUrl, { params });
   }
 
-  getMovie(idPelicula: number): Observable<Movie> {
-    return this.http.get<Movie>(`${this.baseUrl}/${idPelicula}`);
+  getMovie(id_pelicula: number): Observable<Movie> {
+    return this.http.get<Movie>(`${this.baseUrl}/${id_pelicula}`);
   }
 }

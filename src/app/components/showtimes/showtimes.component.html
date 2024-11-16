@@ -1,24 +1,60 @@
-<div class="row row-cols-1 row-cols-md-3 g-4 m-2">
-  <div class="col" *ngFor="let movie of movies">
-    <a
-      [routerLink]="['/showtimes', movie.idPelicula]"
-      class="card-link"
-      style="text-decoration: none"
-    >
-      <div class="card">
-        <img
-          src="{{ movie.thumbnail }}"
-          class="card-img-top"
-          alt="{{ movie.nombrePelicula }}"
-          height="450px"
-        />
-        <div class="card-body">
-          <h5 class="card-title">{{ movie.nombrePelicula }}</h5>
-          <p class="card-text">
-            {{ movie.sinopsisPelicula | slice : 0 : 300 }}...
-          </p>
+<div class="container">
+  <div class="row m-2">
+    <div class="col-12 mb-3">
+      <button class="btn btn-dark" (click)="openModal()">
+        Agregar Función
+      </button>
+    </div>
+  </div>
+  <div class="row row-cols-xs-3 row-cols-md-2 row-cols-1 g-4 m-2">
+    <div class="col" *ngFor="let movie of movies">
+      <a
+        [routerLink]="['/showtimes', movie.idPelicula]"
+        class="card-link text-decoration-none"
+      >
+        <div class="card h-100 card-hover-effect">
+          <img
+            src="{{ movie.thumbnail }}"
+            class="card-img-top"
+            alt="{{ movie.nombrePelicula }}"
+            height="450px"
+          />
+          <div class="card-body d-flex flex-column">
+            <h5 class="card-title">{{ movie.nombrePelicula }}</h5>
+            <p class="card-text flex-grow-1">
+              {{ movie.sinopsisPelicula | slice : 0 : 300 }}...
+            </p>
+          </div>
+        </div>
+      </a>
+    </div>
+  </div>
+
+  <div
+    class="modal fade"
+    id="addShowtimeModal"
+    aria-labelledby="addShowtimeModalLabel"
+    aria-hidden="false"
+  >
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addShowtimeModalLabel">
+            Agregar Función
+          </h5>
+          <button
+            type="button"
+            class="btn-close"
+            (click)="closeModal()"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <app-add-showtime
+            (formSubmitted)="handleFormSubmission()"
+          ></app-add-showtime>
         </div>
       </div>
-    </a>
+    </div>
   </div>
 </div>
