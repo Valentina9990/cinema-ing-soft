@@ -1,9 +1,10 @@
-import { NgFor, NgIf } from '@angular/common';
-import { Component, EventEmitter, Output } from '@angular/core';
+import { formatDate, NgFor, NgIf } from '@angular/common';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { catchError, of } from 'rxjs';
 import { Movie } from '../../../interfaces/movie';
 import { Room } from '../../../interfaces/room';
+import { Show } from '../../../interfaces/show';
 import { ShowTimeRequest } from '../../../interfaces/showTime';
 import { MovieService } from '../../../services/api/movie.service';
 import { RoomService } from '../../../services/api/room.service';
@@ -23,6 +24,7 @@ export class AddShowtimeComponent {
   loading: boolean = false;
 
   showtTime: ShowTimeRequest = {
+    id_funcion: 0,
     id_sala: 0,
     id_pelicula: 0,
     fecha_funcion: '',
@@ -36,6 +38,7 @@ export class AddShowtimeComponent {
   ) {}
 
   @Output() formSubmitted = new EventEmitter<any>();
+  @Input() showTime: Show | null = null;
 
   ngOnInit(): void {
     this.movieService.getMovies().subscribe((data) => {
@@ -49,6 +52,18 @@ export class AddShowtimeComponent {
         a.nombreSala.localeCompare(b.nombreSala)
       );
     });
+  }
+
+  ngOnChanges(): void {
+    if (this.showTime) {
+      this.showtTime = {
+        id_funcion: this.showTime.idFuncion,
+        id_sala: this.showTime.idSala,
+        id_pelicula: this.showTime.idPelicula,
+        fecha_funcion: formatDate(this.showTime.fechaFuncion, 'yyyy-MM-dd', 'en'),
+        hora_inicio_funcion: this.showTime.horaInicioFuncion,
+      };
+    }
   }
 
   onSubmit() {

@@ -3,14 +3,18 @@ import { Component } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { catchError, of } from 'rxjs';
 import { Movie } from '../../../interfaces/movie';
+import { Show } from '../../../interfaces/show';
 import { DatePipe } from '../../../pipes/date.pipe';
 import { MovieService } from '../../../services/api/movie.service';
 import { ShowtimeService } from '../../../services/api/showtime.service';
+import { AddShowtimeComponent } from '../add-showtime/add-showtime.component';
+
+declare const bootstrap: any;
 
 @Component({
   selector: 'app-showtime',
   standalone: true,
-  imports: [NgIf, RouterModule, NgFor, DatePipe],
+  imports: [NgIf, RouterModule, NgFor, DatePipe, AddShowtimeComponent],
   templateUrl: './showtime.component.html',
   styleUrl: './showtime.component.css',
 })
@@ -19,6 +23,7 @@ export class ShowtimeComponent {
   errorMessage: string | null = null;
   successMessage: string | null = null;
   loading: boolean = false;
+  showtimeToEdit: Show | null = null;
 
   constructor(
     private route: ActivatedRoute,
@@ -90,5 +95,21 @@ export class ShowtimeComponent {
     setTimeout(() => {
       this.successMessage = null;
     }, 3000);
+  }
+
+  openModal(showTime: Show) {
+    const modal = bootstrap.Modal.getOrCreateInstance('#addShowtimeModal');
+    this.showtimeToEdit = showTime;
+    modal.show();
+  }
+
+  closeModal() {
+    const modal = bootstrap.Modal.getOrCreateInstance('#addShowtimeModal');
+    modal.hide();
+  }
+
+  handleFormSubmitted() {
+    this.closeModal();
+    this.loadshowtime(Number(this.movie!.idPelicula));
   }
 }

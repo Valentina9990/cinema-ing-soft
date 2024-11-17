@@ -13,6 +13,7 @@
         name="movie"
         #movie="ngModel"
         required
+        [disabled]="showTime?.idFuncion !== null"
       >
         <option value="" disabled selected>Escoje...</option>
         <option *ngFor="let movie of movies" [value]="movie.idPelicula">

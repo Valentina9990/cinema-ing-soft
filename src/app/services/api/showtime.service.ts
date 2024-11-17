@@ -13,7 +13,11 @@ export class ShowtimeService {
   constructor(private http: HttpClient) { }
 
   saveShowtime(showtime: ShowTimeRequest) : Observable<ShowTimeRequest> {
-    return this.http.post<ShowTimeRequest>(this.baseUrl, showtime);
+    if (showtime.id_funcion) {
+      return this.http.put<ShowTimeRequest>(`${this.baseUrl}`, showtime);
+    } else {
+      return this.http.post<ShowTimeRequest>(this.baseUrl, showtime);
+    }
   }
 
   deleteShowtime(showtimeId: number) : Observable<any> {
