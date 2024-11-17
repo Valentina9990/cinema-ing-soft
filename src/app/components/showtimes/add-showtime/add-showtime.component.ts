@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { catchError, of } from 'rxjs';
 import { Movie } from '../../../interfaces/movie';
 import { Room } from '../../../interfaces/room';
-import { ShowTime } from '../../../interfaces/showTime';
+import { ShowTimeRequest } from '../../../interfaces/showTime';
 import { MovieService } from '../../../services/api/movie.service';
 import { RoomService } from '../../../services/api/room.service';
 import { ShowtimeService } from '../../../services/api/showtime.service';
@@ -22,8 +22,7 @@ export class AddShowtimeComponent {
   errorMessage: string = '';
   loading: boolean = false;
 
-  showtTime: ShowTime = {
-    id_funcion: 0,
+  showtTime: ShowTimeRequest = {
     id_sala: 0,
     id_pelicula: 0,
     fecha_funcion: '',

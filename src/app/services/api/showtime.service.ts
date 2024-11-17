@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { ShowTime } from '../../interfaces/showTime';
+import { ShowTimeRequest } from '../../interfaces/showTime';
 import { API_URL } from '../../utils/domains/URLs';
 
 @Injectable({
@@ -12,7 +12,11 @@ export class ShowtimeService {
 
   constructor(private http: HttpClient) { }
 
-  saveShowtime(showtime: ShowTime) : Observable<ShowTime> {
-    return this.http.post<ShowTime>(this.baseUrl, showtime);
+  saveShowtime(showtime: ShowTimeRequest) : Observable<ShowTimeRequest> {
+    return this.http.post<ShowTimeRequest>(this.baseUrl, showtime);
+  }
+
+  deleteShowtime(showtimeId: number) : Observable<any> {
+    return this.http.delete<any>(`${this.baseUrl}/${showtimeId}`);
   }
 }

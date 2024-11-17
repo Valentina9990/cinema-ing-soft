@@ -1,5 +1,4 @@
-export interface ShowTime {
-    id_funcion: number,
+export interface ShowTimeRequest {
     id_sala: number,
     id_pelicula: number,
     fecha_funcion: string,
