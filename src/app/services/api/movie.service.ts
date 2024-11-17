@@ -7,20 +7,20 @@ import { API_URL } from '../../utils/domains/URLs';
 @Injectable({
   providedIn: 'root',
 })
-export class MoviesService {
+export class MovieService {
   private baseUrl = `${API_URL}/movies`;
 
   constructor(private http: HttpClient) {}
 
-  getMovies(limit: number = 10, offset: number = 0): Observable<Movie[]> {
+  getMovies(limit: number|null = null, offset: number = 0): Observable<Movie[]> {
     const params = new HttpParams()
-      .set('limit', limit.toString())
-      .set('offset', offset.toString());
+      .set('offset', offset.toString())
+      .set('limit', limit ? limit.toString() : '');
 
     return this.http.get<Movie[]>(this.baseUrl, { params });
   }
 
-  getMovie(idPelicula: number): Observable<Movie> {
-    return this.http.get<Movie>(`${this.baseUrl}/${idPelicula}`);
+  getMovie(id_pelicula: number): Observable<Movie> {
+    return this.http.get<Movie>(`${this.baseUrl}/${id_pelicula}`);
   }
 }

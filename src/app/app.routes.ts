@@ -1,9 +1,9 @@
 import { Routes } from '@angular/router';
 import { CineComponent } from './components/cine/cine.component';
 import { ComidaComponent } from './components/comida/comida.component';
-import { FunctionComponent } from './components/functions/function/function.component';
-import { FunctionsComponent } from './components/functions/functions.component';
 import { MoviesComponent } from './components/movies/movies.component';
+import { ShowtimeComponent } from './components/showtimes/showtime/showtime.component';
+import { ShowtimesComponent } from './components/showtimes/showtimes.component';
 import { UsersComponent } from './components/users/users.component';
 import { ErrorComponent } from './core/error/error.component';
 import { LogoutComponent } from './core/logout/logout.component';
@@ -26,12 +26,12 @@ export const routes: Routes = [
         component: CineComponent
     },
     {
-        path: 'functions',
-        component: FunctionsComponent
+        path: 'showtimes',
+        component: ShowtimesComponent
     },
     {
-        path: 'functions/:id',
-        component: FunctionComponent
+        path: 'showtimes/:id',
+        component: ShowtimeComponent
     },
     {
         path: 'comida',
