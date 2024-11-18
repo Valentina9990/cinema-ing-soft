@@ -1,190 +1,150 @@
-<div class="container">
-    <header data-type="regular" class="jsx-2434353996 concessions-block__header">
-        <span data-type="regular">Combos</span>
-    </header>
-    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-            <div class="col">
-                <div class="card shadow-sm">
-                    <div class="jsx-1346325705 candy-store__image--container"><img
-                            src="https://assets.cinemark-core.com/5db771be04daec00076df3f5/vista/concessions/65f847102cadb60ea5d48364/common/6375-1720475768225"
-                            alt="Combo Amigos" class="jsx-1346325705 candy-store__image"></div>
-
-                    <div class="card-body">
-                        <h4 class="jsx-1346325705 candy-store__name text--uppercase">Combo Amigues</h4>
-                        <p class="card-text">1 Crispetas Mega 250 Gr + 2 Bebidas medianas 532 ml + 2 Perros calientes.</p>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div class="btn-group">
-
-                                <button type="button" class="btn btn-sm btn-outline-secondary">Comprar</button>
-                                <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="card shadow-sm">
-                    <div class="jsx-1346325705 candy-store__image--container"><img
-                            src="https://assets.cinemark-core.com/5db771be04daec00076df3f5/vista/concessions/65f847102cadb60ea5d4836d/common/6377-1718136377565"
-                            alt="Combo Snack Perro" class="jsx-1346325705 candy-store__image"></div>
-                    <div class="card-body">
-                        <h4 class="jsx-1346325705 candy-store__name text--uppercase">Combo Snack Perro</h4>
-                        <p class="card-text">1 Bebida mediana 532 ml + 1 Perro Caliente.</p>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div class="btn-group">
-                                <button type="button" class="btn btn-sm btn-outline-secondary">Comprar</button>
-                                <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-                            </div>
-                            
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="card shadow-sm">
-                    <div class="jsx-1346325705 candy-store__image--container"><img
-                            src="https://assets.cinemark-core.com/5db771be04daec00076df3f5/vista/concessions/65f847102cadb60ea5d4836a/common/6378-1718136364196"
-                            alt="Combo Kids" class="jsx-1346325705 candy-store__image"></div>
-                    <div class="card-body">
-                        <h4 class="jsx-1346325705 candy-store__name text--uppercase">Combo Kids</h4>
-                        <p class="card-text">1 Cajita de Crispeta Salada de 95 grs + 1 Bebida Pequeña 384 ml + 1 Chocolatina
-                            Jet 11 grs.</p>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div class="btn-group">
-                                <button type="button" class="btn btn-sm btn-outline-secondary">Comprar</button>
-                                <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-                            </div>
-                            
-                        </div>
-                    </div>
-                </div>
-
-            </div>
+<div class="container mt-4">
+    <!-- Mensajes de éxito y error -->
+    <div *ngIf="mensajeExito" class="alert alert-success" role="alert">
+      {{ mensajeExito }}
     </div>
-    <header data-type="promo" class="jsx-2434353996 concessions-block__header"><span
-        data-type="regular">Promociones</span></header>
-    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3"> 
-        <div class="col">
-            <div class="card shadow-sm">
-                <div class="jsx-1346325705 candy-store__image--container"><img
-                        src="https://assets.cinemark-core.com/5db771be04daec00076df3f5/vista/concessions/66fafb4a8342cd5adb82b001/common/6974-1727724482056"
-                        alt="Combo Show Familiar" class="jsx-1346325705 candy-store__image"></div>
-
-                <div class="card-body">
-                    <h4 class="jsx-1346325705 candy-store__name text--uppercase">Combo Show Familiar</h4>
-                    <p class="card-text">1 Crispeta grande 230 gr + 2 Bebidas Grandes 798 ml + 2 Perros Calientes +
-                        Obsequio 1 botella de agua 600 ml.</p>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-sm btn-outline-secondary">Comprar</button>
-                            <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-                        </div>
-                        
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col">
-            <div class="card shadow-sm">
-                <div class="jsx-1346325705 candy-store__image--container"><img
-                        src="https://assets.cinemark-core.com/5db771be04daec00076df3f5/vista/concessions/66cdeaa6f71ad40c633c2af3/common/6842-1726002522342"
-                        alt="Recarga gaseosa Vaso Coca Cola Reutilizable" class="jsx-1346325705 candy-store__image">
-                </div>
-                <div class="card-body">
-                    <h4 class="jsx-1346325705 candy-store__name text--uppercase">Recarga gaseosa Vaso Coca Cola
-                        Reutilizable</h4>
-                    <p class="card-text">Trae tu vaso reutilizable Coca Cola y llenalo con 1 gaseosa 798 ml.</p>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-sm btn-outline-secondary">Comprar</button>
-                            <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-                        </div>
-                        
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col">
-            <div class="card shadow-sm">
-                <div class="jsx-1346325705 candy-store__image--container"><img
-                        src="https://assets.cinemark-core.com/5db771be04daec00076df3f5/vista/concessions/628f64f696c701000a89f500/common/4652-1730146231714"
-                        alt="PROMO 2 CRISPETAS AMEX WEB" class="jsx-1346325705 candy-store__image"></div>
-                <div class="card-body">
-                    <h4 class="jsx-1346325705 candy-store__name text--uppercase">PROMO 2 CRISPETAS AMEX WEB</h4>
-                    <p class="card-text">Promoción válida únicamente con tarjetas American Express.</p>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-sm btn-outline-secondary">Comprar</button>
-                            <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-                        </div>
-                        
-                    </div>
-                </div>
-            </div>
-        </div>
+    <div *ngIf="mensajeError" class="alert alert-danger" role="alert">
+      {{ mensajeError }}
     </div>
   
-    <header data-type="regular" class="concessions-block__header">
-    <span>Crispetas y bebidas</span>
-    </header>
-    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-        <div class="col">
-            
-            <div class="card shadow-sm">
-                <div class="jsx-1346325705 candy-store__image--container"><img
-                        src="https://assets.cinemark-core.com/5db771be04daec00076df3f5/vista/concessions/61fc2ad97d291e0008578e06/common/4591-1718136174509"
-                        alt="Crispeta Grande 230 Gr" class="jsx-1346325705 candy-store__image"></div>
-                <div class="card-body">
-                    <h4 class="jsx-1346325705 candy-store__name text--uppercase">Crispeta Grande 230 Gr</h4>
-                    <p class="card-text">1 Crispeta grande con sal de 230 gr.</p>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-sm btn-outline-secondary">Comprar</button>
-                            <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-                        </div>
-
-                        
-                    </div>
-                </div>
-            </div>
+    <!-- Formulario para agregar una nueva comida -->
+    <h2>Agregar Comida</h2>
+    <form (ngSubmit)="agregarComida()" class="mb-4">
+      <div class="form-group">
+        <label for="nombreComida">Nombre de la comida:</label>
+        <input
+          type="text"
+          id="nombreComida"
+          [(ngModel)]="nuevaComida.nombreComida"
+          name="nombreComida"
+          class="form-control"
+          required
+        />
+      </div>
+      <div class="form-group">
+        <label for="precioComida">Precio de la comida:</label>
+        <input
+          type="number"
+          id="precioComida"
+          [(ngModel)]="nuevaComida.precioComida"
+          name="precioComida"
+          class="form-control"
+          required
+        />
+      </div>
+      <button type="submit" class="btn btn-primary mt-2">Agregar</button>
+    </form>
+  
+    <!-- Tabla de comidas -->
+    <h2>Lista de Comidas</h2>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Nombre</th>
+          <th>Precio</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let comida of comidas; let i = index">
+          <td>{{ i + 1 + (currentPage - 1) * pageSize }}</td>
+          <td>{{ comida.nombreComida }}</td>
+          <td>{{ comida.precioComida }}</td>
+          <td>
+            <!-- Botón de editar -->
+            <button
+              class="btn btn-warning btn-sm me-2"
+              (click)="prepararActualizacion(comida)"
+              data-bs-toggle="modal"
+              data-bs-target="#modalActualizar"
+            >
+              Editar
+            </button>
+            <!-- Botón de eliminar -->
+            <button
+              class="btn btn-danger btn-sm"
+              (click)="eliminarComida(comida.idComida)"
+            >
+              Eliminar
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  
+    <!-- Paginación -->
+    <ngb-pagination
+      [(page)]="currentPage"
+      [pageSize]="pageSize"
+      [collectionSize]="totalItems"
+      (pageChange)="cambiarPagina($event)"
+    ></ngb-pagination>
+  
+    <!-- Modal para actualizar comida -->
+    <div
+      class="modal fade"
+      id="modalActualizar"
+      tabindex="-1"
+      aria-labelledby="modalActualizarLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modalActualizarLabel">Actualizar Comida</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <form>
+              <div class="form-group">
+                <label for="nombreComidaActualizar">Nombre de la comida:</label>
+                <input
+                  type="text"
+                  id="nombreComidaActualizar"
+                  [(ngModel)]="comidaParaActualizar.nombreComida"
+                  name="nombreComidaActualizar"
+                  class="form-control"
+                  required
+                />
+              </div>
+              <div class="form-group">
+                <label for="precioComidaActualizar">Precio de la comida:</label>
+                <input
+                  type="number"
+                  id="precioComidaActualizar"
+                  [(ngModel)]="comidaParaActualizar.precioComida"
+                  name="precioComidaActualizar"
+                  class="form-control"
+                  required
+                />
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Cerrar
+            </button>
+            <button
+              type="button"
+              class="btn btn-primary"
+              (click)="actualizarComida()"
+              data-bs-dismiss="modal"
+            >
+              Guardar cambios
+            </button>
+          </div>
         </div>
-        <div class="col">
-            <div class="card shadow-sm">
-                <div class="jsx-1346325705 candy-store__image--container"><img
-                        src="https://assets.cinemark-core.com/5db771be04daec00076df3f5/vista/concessions/5f3d96a6a3b42b0007e7d355/common/3870-1718135703571"
-                        alt="Crispeta Pequeña 100 Gr" class="jsx-1346325705 candy-store__image"></div>
-                <div class="card-body">
-                    <h4 class="jsx-1346325705 candy-store__name text--uppercase">Crispeta Pequeña</h4>
-                    <p class="card-text">1 Crispeta pequeña con sal de 100 gr</p>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-sm btn-outline-secondary">Comprar</button>
-                            <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-                        </div>
-                        
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col">
-            <div class="card shadow-sm">
-                <div class="jsx-1346325705 candy-store__image--container"><img
-                        src="https://assets.cinemark-core.com/5db771be04daec00076df3f5/vista/concessions/664d3a83940e7b3af5ec74e5/common/5711-1721340734928"
-                        alt="Agua" class="jsx-1346325705 candy-store__image"></div>
-                <div class="card-body">
-                    <h4 class="jsx-1346325705 candy-store__name text--uppercase">Agua</h4>
-                    <p class="card-text">Agua botella 600 ml.</p>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-sm btn-outline-secondary">Comprar</button>
-                            <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-                        </div>
-                        
-                    </div>
-                </div>
-            </div>
-        </div>
+      </div>
     </div>
-    
-       
-</div>
+  </div>
+  
