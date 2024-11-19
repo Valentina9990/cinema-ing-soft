@@ -1,87 +1,312 @@
-<div >
-    <div class="row row-cols-2 row-cols-md-4 g-4">
-        <div class="col">
-          <div class="card h-100">
-            <img src="suzume.jpg" class="card-img-top" alt="...">
-            <div class="card-body">
-              <h5 class="card-title">Suzume no Tojimari</h5>
-              <p class="card-text">Un viaje mágico a través de un mundo lleno de puertas misteriosas, donde una joven descubre su propia fuerza y valentía. </p>
+<div class="container mt-4">
+  <h1 class="text-center mb-4">Películas</h1>
+
+  <!-- Loading Spinner -->
+  <div *ngIf="isLoading" class="text-center my-3">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+  </div>
+
+  <div
+    *ngIf="errorMessage"
+    class="alert alert-danger alert-dismissible fade show"
+    role="alert"
+  >
+    {{ errorMessage }}
+    <button
+      type="button"
+      class="btn-close"
+      (click)="errorMessage = ''"
+      aria-label="Cerrar"
+    ></button>
+  </div>
+
+  <div class="row mb-4">
+    <div class="col-md-8">
+      <label for="searchInput" class="visually-hidden">Buscar película</label>
+      <input
+        type="text"
+        id="searchInput"
+        class="form-control"
+        placeholder="Buscar película por nombre"
+        [(ngModel)]="searchTerm"
+        (ngModelChange)="onSearchChange($event)"
+        [disabled]="isLoading"
+      />
+    </div>
+    <div class="col-md-4 text-end">
+      <button
+        class="btn btn-primary"
+        (click)="onSearchChange(searchTerm)"
+        [disabled]="isLoading"
+        aria-label="Buscar películas"
+      >
+        <i class="bi bi-search me-1"></i>Buscar
+      </button>
+    </div>
+  </div>
+
+  <div class="table-responsive">
+    <table class="table table-striped table-bordered">
+      <thead class="table-dark">
+        <tr>
+          <th scope="col">ID</th>
+          <th scope="col">Nombre</th>
+          <th scope="col">Portada</th>
+          <th scope="col">Género ID</th>
+          <th scope="col">Duración</th>
+          <th scope="col">Idioma</th>
+          <th scope="col">Sinopsis</th>
+          <th scope="col">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container
+          *ngIf="!isLoading && paginatedMovies.length > 0; else noMovies"
+        >
+          <tr *ngFor="let movie of paginatedMovies; trackBy: trackByMovieId">
+            <th scope="row">{{ movie.idPelicula }}</th>
+            <td>{{ movie.nombrePelicula }}</td>
+            <td>
+              <img
+                [src]="movie.thumbnail"
+                [alt]="'Portada de ' + movie.nombrePelicula"
+                class="img-thumbnail"
+                width="100"
+                height="150"
+                loading="lazy
+                "
+              />
+            </td>
+            <td>{{ movie.idGenero }}</td>
+            <td>{{ movie.duracionPelicula }} min</td>
+            <td>{{ movie.idioma }}</td>
+            <td
+              class="text-truncate"
+              style="max-width: 200px"
+              [title]="movie.sinopsisPelicula"
+            >
+              {{ movie.sinopsisPelicula }}
+            </td>
+            <td>
+              <div class="btn-group" role="group">
+                <button
+                  class="btn btn-warning btn-sm"
+                  (click)="editMovie(movie)"
+                  [disabled]="isLoading"
+                  aria-label="Editar película"
+                >
+                  <i class="bi bi-pencil-fill" aria-hidden="true"></i>
+                </button>
+                <button
+                  class="btn btn-danger btn-sm"
+                  (click)="deleteMovie(movie.idPelicula)"
+                  [disabled]="isLoading"
+                  aria-label="Eliminar película"
+                >
+                  <i class="bi bi-trash3-fill" aria-hidden="true"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </ng-container>
+        <ng-template #noMovies>
+          <tr>
+            <td colspan="8" class="text-center py-4">
+              <i class="bi bi-film me-2"></i>
+              {{
+                isLoading
+                  ? "Cargando películas..."
+                  : "No hay películas disponibles"
+              }}
+            </td>
+          </tr>
+        </ng-template>
+      </tbody>
+    </table>
+  </div>
+
+  <div
+    class="d-flex justify-content-center mt-3"
+    *ngIf="totalMovies > pageSize"
+  >
+    <ngb-pagination
+      [collectionSize]="totalMovies"
+      [(page)]="page"
+      [pageSize]="pageSize"
+      (pageChange)="onPageChange($event)"
+      [maxSize]="5"
+      [rotate]="true"
+      [boundaryLinks]="true"
+      [disabled]="isLoading"
+      aria-label="Navegación de páginas"
+    >
+    </ngb-pagination>
+  </div>
+
+  <div class="card mt-4">
+    <div class="card-header bg-primary text-white">
+      <h2 class="h5 mb-0">
+        <i
+          class="bi"
+          [ngClass]="
+            newMovie.idPelicula ? 'bi-pencil-square' : 'bi-plus-circle'
+          "
+        ></i>
+        {{ newMovie.idPelicula ? "Editar Película" : "Agregar Película" }}
+      </h2>
+    </div>
+    <div class="card-body">
+      <form (ngSubmit)="onSubmit()" #movieForm="ngForm">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label for="nombrePelicula" class="form-label">Nombre *</label>
+              <input
+                id="nombrePelicula"
+                type="text"
+                class="form-control"
+                [(ngModel)]="newMovie.nombrePelicula"
+                name="nombrePelicula"
+                required
+                #nombre="ngModel"
+                [class.is-invalid]="nombre.invalid && nombre.touched"
+              />
+              <div
+                class="invalid-feedback"
+                *ngIf="nombre.invalid && nombre.touched"
+              >
+                El nombre de la película es requerido
+              </div>
             </div>
-        </div>
-    </div>
-    <div class="col">
-          <div class="card h-100">
-            <img src="coraline.jpg" class="card-img-top" alt="...">
-            <div class="card-body">
-              <h5 class="card-title">Coraline</h5>
-              <p class="card-text">Una niña curiosa encuentra un mundo alternativo que parece perfecto, pero oculta oscuros secretos que amenazan su vida y la de su familia.</p>
+            <div class="mb-3">
+              <label for="idGenero" class="form-label">ID Género *</label>
+              <input
+                id="idGenero"
+                type="number"
+                class="form-control"
+                [(ngModel)]="newMovie.idGenero"
+                name="idGenero"
+                required
+                min="1"
+                #genero="ngModel"
+                [class.is-invalid]="genero.invalid && genero.touched"
+              />
+              <div
+                class="invalid-feedback"
+                *ngIf="genero.invalid && genero.touched"
+              >
+                El ID del género es requerido y debe ser mayor a 0
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="duracionPelicula" class="form-label"
+                >Duración (minutos) *</label
+              >
+              <input
+                id="duracionPelicula"
+                type="number"
+                class="form-control"
+                [(ngModel)]="newMovie.duracionPelicula"
+                name="duracionPelicula"
+                required
+                min="1"
+                #duracion="ngModel"
+                [class.is-invalid]="duracion.invalid && duracion.touched"
+              />
+              <div
+                class="invalid-feedback"
+                *ngIf="duracion.invalid && duracion.touched"
+              >
+                La duración es requerida y debe ser mayor a 0
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label for="idioma" class="form-label">Idioma *</label>
+              <input
+                id="idioma"
+                type="text"
+                class="form-control"
+                [(ngModel)]="newMovie.idioma"
+                name="idioma"
+                required
+                #idioma="ngModel"
+                [class.is-invalid]="idioma.invalid && idioma.touched"
+              />
+              <div
+                class="invalid-feedback"
+                *ngIf="idioma.invalid && idioma.touched"
+              >
+                El idioma es requerido
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="thumbnail" class="form-label"
+                >URL de la portada *</label
+              >
+              <input
+                id="thumbnail"
+                type="url"
+                class="form-control"
+                [(ngModel)]="newMovie.thumbnail"
+                name="thumbnail"
+                required
+                #thumbnail="ngModel"
+                [class.is-invalid]="thumbnail.invalid && thumbnail.touched"
+              />
+              <div
+                class="invalid-feedback"
+                *ngIf="thumbnail.invalid && thumbnail.touched"
+              >
+                La URL de la portada es requerida y debe ser válida
+              </div>
             </div>
           </div>
         </div>
-    <div class="col">
-          <div class="card h-100">
-            <img src="castillo.jpeg" class="card-img-top" alt="...">
-            <div class="card-body">
-              <h5 class="card-title">El Castillo Vagabundo de Howl</h5>
-              <p class="card-text">Sophie, una joven transformada en anciana por una bruja, se embarca en una aventura mágica con Howl, un mago excéntrico, mientras enfrentan fuerzas oscuras y descubren el poder del amor y la valentía.</p>
-            </div>
-          </div>
-    </div>
-    <div class="col">
-        <div class="card h-100">
-          <img src="Haikyu.jpg" class="card-img-top" alt="...">
-          <div class="card-body">
-            <h5 class="card-title">Haikyuu!!</h5>
-            <p class="card-text">La historia de un joven voleibolista que, a pesar de su corta estatura, sueña con ser el mejor jugador, enfrentándose a adversidades y forjando fuertes amistades.</p>
-          </div>
-        </div>
-    </div>
-    <div class="col">
-        <div class="card h-100">
-          <img src="kimetsu.jpg" class="card-img-top" alt="...">
-          <div class="card-body">
-            <h5 class="card-title">Kimetsu no Yaiba</h5>
-            <p class="card-text"> Un joven luchador se convierte en cazador de demonios después de que su familia es asesinada, buscando salvar a su hermana y vengar a su familia.</p>
+        <div class="mb-3">
+          <label for="sinopsisPelicula" class="form-label">Sinopsis *</label>
+          <textarea
+            id="sinopsisPelicula"
+            class="form-control"
+            [(ngModel)]="newMovie.sinopsisPelicula"
+            name="sinopsisPelicula"
+            rows="3"
+            required
+            #sinopsis="ngModel"
+            [class.is-invalid]="sinopsis.invalid && sinopsis.touched"
+          ></textarea>
+          <div
+            class="invalid-feedback"
+            *ngIf="sinopsis.invalid && sinopsis.touched"
+          >
+            La sinopsis es requerida
           </div>
         </div>
-    </div>
-    <div class="col">
-        <div class="card h-100">
-          <img src="sustancia.png" class="card-img-top" alt="...">
-          <div class="card-body">
-            <h5 class="card-title">La Sustancia</h5>
-            <p class="card-text">Un grupo de jóvenes se enfrenta a los efectos devastadores de una nueva droga que altera la realidad, explorando temas de amistad, desilusión y la lucha por escapar de un mundo en crisis.</p>
-          </div>
+        <div class="d-flex justify-content-between mt-4">
+          <button
+            type="submit"
+            class="btn btn-success"
+            [disabled]="movieForm.invalid || isLoading"
+          >
+            <i
+              class="bi"
+              [ngClass]="newMovie.idPelicula ? 'bi-save' : 'bi-plus-lg'"
+            ></i>
+            {{ newMovie.idPelicula ? "Actualizar" : "Agregar" }}
+          </button>
+          <button
+            type="button"
+            class="btn btn-secondary"
+            (click)="resetForm()"
+            [disabled]="isLoading"
+          >
+            <i class="bi bi-x-circle"></i> Cancelar
+          </button>
         </div>
+      </form>
     </div>
-    <div class="col">
-        <div class="card h-100">
-          <img src="chihiro.png" class="card-img-top" alt="...">
-          <div class="card-body">
-            <h5 class="card-title">El Viaje de Chihiro</h5>
-            <p class="card-text">Una niña se encuentra atrapada en un mundo espiritual y debe encontrar el camino de regreso a casa, enfrentando desafíos y haciendo nuevos amigos.</p>
-          </div>
-        </div>
-    </div>
-    <div class="col">
-        <div class="card h-100">
-          <img src="mononoke.jpg" class="card-img-top" alt="...">
-          <div class="card-body">
-            <h5 class="card-title">La Princesa Mononoke</h5>
-            <p class="card-text">Una épica batalla entre la naturaleza y la industria, donde un joven guerrero se convierte en mediador entre humanos y espíritus del bosque.</p>
-          </div>
-        </div>
-    </div>
-    <div class="col">
-        <div class="card h-100">
-          <img src="belle.jpg" class="card-img-top" alt="...">
-          <div class="card-body">
-            <h5 class="card-title">Belle</h5>
-            <p class="card-text">Una conmovedora historia sobre la búsqueda de la conexión humana en un mundo digital, explorando el amor y la amistad a través de una emocionante narrativa.</p>
-          </div>
-        </div>
-    </div>
-    
-    
-      
+  </div>
 </div>
