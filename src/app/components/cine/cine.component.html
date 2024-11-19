@@ -1,125 +1,172 @@
-<div>
-    <div class="container my-5">
-        <h1 class="text-center mb-5">Cines Disponibles</h1>
+<div class="d-flex justify-content-center">
+  <div class="col-md-9">
+    <h5 class="mt-2">Cines</h5>
+    <button class="btn btn-primary mt-4 add-cine-icon" (click)="openCineForm()">
+      <i class="bi bi-building-plus"></i>
+    </button>
 
-        <!-- América -->
-        <h2 class="text-danger">América</h2>
-        <div class="row">
-            <!-- México -->
-            <div class="col-md-4 col-lg-3 mb-4">
-                <h3 class="text-primary">México</h3>
-                <div class="card">
-                    <img src="CinepolisPerisur.png" class="card-img-top" alt="Cinepolis Perisur">
-                    <div class="card-body">
-                        <h5 class="card-title">Cinepolis Perisur</h5>
-                        <p>Dirección: Av. Periférico Sur 4690, CDMX</p>
-                        <p>Teléfono: +52 55 1234 5678</p>
-                        <p>Cine con múltiples salas y tecnología de punta.</p>
-                    </div>
-                </div>
-            </div>
-            <!-- Argentina -->
-            <div class="col-md-4 col-lg-3 mb-4">
-                <h3 class="text-primary">Argentina</h3>
-                <div class="card">
-                    <img src="CinemarkPalermo.png" class="card-img-top" alt="Cinemark Palermo">
-                    <div class="card-body">
-                        <h5 class="card-title">Cinemark Palermo</h5>
-                        <p>Dirección: Av. Santa Fe 3253, Buenos Aires</p>
-                        <p>Teléfono: +54 11 1234 5678</p>
-                        <p>Cine moderno en el centro de Buenos Aires.</p>
-                    </div>
-                </div>
-            </div>
-            <!-- Colombia -->
-            <div class="col-md-4 col-lg-3 mb-4">
-                <h3 class="text-primary">Colombia</h3>
-                <div class="card">
-                    <img src="colombia.jpeg" class="card-img-top" alt="Cine Colombia Andino">
-                    <div class="card-body">
-                        <h5 class="card-title">Cine Colombia Andino</h5>
-                        <p>Dirección: Cra. 11 #82-71, Bogotá</p>
-                        <p>Teléfono: +57 1 1234 5678</p>
-                        <p>Moderno cine en el centro comercial Andino.</p>
-                    </div>
-                </div>
-            </div>
-            <!-- Chile -->
-            <div class="col-md-4 col-lg-3 mb-4">
-                <h3 class="text-primary">Chile</h3>
-                <div class="card">
-                    <img src="CineHoyts.jpeg" class="card-img-top" alt="Cine Hoyts La Reina">
-                    <div class="card-body">
-                        <h5 class="card-title">Cine Hoyts La Reina</h5>
-                        <p>Dirección: Av. Ossa 655, Santiago</p>
-                        <p>Teléfono: +56 2 1234 5678</p>
-                        <p>Un cine con la mejor tecnología en Santiago.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Europa -->
-        <h2 class="text-danger mt-5">Europa</h2>
-        <div class="row">
-            <!-- España -->
-            <div class="col-md-4 col-lg-3 mb-4">
-                <h3 class="text-primary">España</h3>
-                <div class="card">
-                    <img src="españa.jpeg" class="card-img-top" alt="Cinesa Diagonal">
-                    <div class="card-body">
-                        <h5 class="card-title">Cinesa Diagonal</h5>
-                        <p>Dirección: Av. Diagonal 564, Barcelona</p>
-                        <p>Teléfono: +34 93 123 4567</p>
-                        <p>Cine con tecnología de última generación.</p>
-                    </div>
-                </div>
-            </div>
-            <!-- Francia -->
-            <div class="col-md-4 col-lg-3 mb-4">
-                <h3 class="text-primary">Francia</h3>
-                <div class="card">
-                    <img src="francia.jpeg" class="card-img-top" alt="UGC Ciné Cité Les Halles">
-                    <div class="card-body">
-                        <h5 class="card-title">UGC Ciné Cité Les Halles</h5>
-                        <p>Dirección: 7 Place de la Rotonde, París</p>
-                        <p>Teléfono: +33 1 1234 5678</p>
-                        <p>El cine más grande en el centro de París.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Asia -->
-        <h2 class="text-danger mt-5">Asia</h2>
-        <div class="row">
-            <!-- Japón -->
-            <div class="col-md-4 col-lg-3 mb-4">
-                <h3 class="text-primary">Japón</h3>
-                <div class="card">
-                    <img src="japon.jpeg" class="card-img-top" alt="Toho Cinemas Shinjuku">
-                    <div class="card-body">
-                        <h5 class="card-title">Toho Cinemas Shinjuku</h5>
-                        <p>Dirección: 1-19-1 Kabukicho, Tokio</p>
-                        <p>Teléfono: +81 3 1234 5678</p>
-                        <p>Ubicado en el corazón de Kabukicho con lo último en cine.</p>
-                    </div>
-                </div>
-            </div>
-            <!-- India -->
-            <div class="col-md-4 col-lg-3 mb-4">
-                <h3 class="text-primary">India</h3>
-                <div class="card">
-                    <img src="india.jpeg" class="card-img-top" alt="PVR Phoenix Marketcity">
-                    <div class="card-body">
-                        <h5 class="card-title">PVR Phoenix Marketcity</h5>
-                        <p>Dirección: 462, Phoenix Marketcity, Mumbai</p>
-                        <p>Teléfono: +91 22 1234 5678</p>
-                        <p>Cine de lujo con una gran experiencia de visualización.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
+    @if (isCineFormOpen) {
+    <div class="overlay">
+      <div class="cine-form-container" (click)="$event.stopPropagation()">
+        <form (ngSubmit)="addCine()">
+          <div class="form-group">
+            <label for="nombreCine">Nombre</label>
+            <input
+              type="text"
+              id="nombreCine"
+              class="form-control"
+              [(ngModel)]="newCine.nombreCine"
+              name="nombreCine"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="direccionCine">Dirección</label>
+            <input
+              type="text"
+              id="direccionCine"
+              class="form-control"
+              [(ngModel)]="newCine.direccionCine"
+              name="direccionCine"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="telefonoCine">Teléfono</label>
+            <input
+              type="text"
+              id="telefonoCine"
+              class="form-control"
+              [(ngModel)]="newCine.telefonoCine"
+              name="telefonoCine"
+              required
+            />
+          </div>
+          <div class="d-flex justify-content-evenly mb-3">
+            <button type="submit" class="btn btn-success mt-3 add-cine-icon">
+              Crear Cine
+            </button>
+            <button
+              type="button"
+              class="btn btn-secondary mt-3 cancel-button"
+              (click)="closeCineForm()"
+            >
+              Cancelar
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
 
+    } @if (errorMessage) {
+    <div class="alert alert-danger mt-2">
+      {{ errorMessage }}
+    </div>
+
+    } @if (successMessage) {
+    <div class="alert alert-success mt-2">
+      {{ successMessage }}
+    </div>
+    }
+    <table class="table mt-4">
+      <thead class="thead-dark">
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Nombre</th>
+          <th scope="col">Dirección</th>
+          <th scope="col">Teléfono</th>
+          <th scope="col">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (cine of cines; track cine.idCine; let i = $index) {
+        <tr>
+          <th scope="row">{{ (page - 1) * pageSize + i + 1 }}</th>
+          <td>
+            @if (selectedCine.idCine === cine.idCine) {
+            <input
+              type="text"
+              class="form-control"
+              [(ngModel)]="selectedCine.nombreCine"
+            />
+            } @else {
+            {{ cine.nombreCine }}
+            }
+          </td>
+          <td>
+            @if (selectedCine.idCine === cine.idCine) {
+            <input
+              type="text"
+              class="form-control"
+              [(ngModel)]="selectedCine.direccionCine"
+            />
+            } @else {
+            {{ cine.direccionCine }}
+            }
+          </td>
+          <td>
+            @if (selectedCine.idCine === cine.idCine) {
+            <input
+              type="text"
+              class="form-control"
+              [(ngModel)]="selectedCine.telefonoCine"
+            />
+            } @else {
+            {{ cine.telefonoCine }}
+            }
+          </td>
+          <td>
+            @if (selectedCine.idCine === cine.idCine) {
+            <button
+              class="btn btn-sm btn-success me-2"
+              (click)="saveChanges(selectedCine)"
+            >
+              <i class="bi bi-check"></i>
+            </button>
+            <button
+              class="btn btn-sm btn-secondary"
+              (click)="selectedCine = {}"
+            >
+              <i class="bi bi-x"></i>
+            </button>
+            } @else {
+            <button
+              class="btn btn-sm btn-primary me-2"
+              (click)="editCine(cine)"
+              [ngClass]="{
+                'edit-icon-inactive': selectedCine.idCine !== cine.idCine,
+                'edit-icon-active': selectedCine.idCine === cine.idCine
+              }"
+            >
+              <i class="bi bi-pencil"></i>
+            </button>
+            <button
+              class="btn btn-sm btn-danger"
+              (click)="deleteCine(cine.idCine)"
+            >
+              <i class="bi bi-trash"></i>
+            </button>
+            }
+          </td>
+        </tr>
+        } @empty {
+        <tr>
+          <td colspan="5" class="text-center">No hay cines disponibles</td>
+        </tr>
+        }
+      </tbody>
+    </table>
+    <div class="d-flex justify-content-center">
+      <ngb-pagination
+        [collectionSize]="totalCines"
+        [(page)]="page"
+        [pageSize]="pageSize"
+        (pageChange)="onPageChange($event)"
+        [maxSize]="5"
+        [rotate]="true"
+        [boundaryLinks]="true"
+      >
+      </ngb-pagination>
+    </div>
+  </div>
 </div>

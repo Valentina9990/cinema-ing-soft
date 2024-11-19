@@ -1,0 +1,101 @@
+<div *ngIf="errorMessage" class="alert alert-danger">
+  {{ errorMessage }}
+</div>
+
+<form (ngSubmit)="onSubmit()" #addShowtimeForm="ngForm">
+  <div class="form-row">
+    <div class="form-group col-md-12 mb-2">
+      <label for="inputState">Pelicula</label>
+      <select
+        id="inputState"
+        class="form-control"
+        [(ngModel)]="showtTime.id_pelicula"
+        name="movie"
+        #movie="ngModel"
+        required
+        [disabled]="showTime?.idFuncion !== null"
+      >
+        <option value="" disabled selected>Escoje...</option>
+        <option *ngFor="let movie of movies" [value]="movie.idPelicula">
+          {{ movie.nombrePelicula }}
+        </option>
+      </select>
+      <div *ngIf="movie.invalid && movie.touched" class="text-danger">
+        Por favor, selecciona una película.
+      </div>
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="form-group col-md-12 mb-2">
+      <label for="inputState">Sala</label>
+      <select
+        id="inputState"
+        class="form-control"
+        [(ngModel)]="showtTime.id_sala"
+        name="room"
+        #room="ngModel"
+        required
+      >
+        <option value="" disabled selected>Escoje...</option>
+        <option *ngFor="let room of rooms" [value]="room.idSala">
+          {{ room.nombreSala }}
+        </option>
+      </select>
+      <div *ngIf="room.invalid && room.touched" class="text-danger">
+        Por favor, selecciona una sala.
+      </div>
+    </div>
+  </div>
+
+  <div class="form-row d-flex justify-content-between">
+    <div class="form-group col-md-5">
+      <label for="functionDate">Fecha</label>
+      <input
+        type="date"
+        id="functionDate"
+        class="form-control"
+        [(ngModel)]="showtTime.fecha_funcion"
+        name="fecha_funcion"
+        #fecha_funcion="ngModel"
+        required
+      />
+      <div
+        *ngIf="fecha_funcion.invalid && fecha_funcion.touched"
+        class="text-danger"
+      >
+        Por favor, selecciona una fecha.
+      </div>
+    </div>
+    <div class="form-group col-md-5">
+      <label for="functionTime">Hora de Inicio</label>
+      <input
+        type="time"
+        id="functionTime"
+        class="form-control"
+        [(ngModel)]="showtTime.hora_inicio_funcion"
+        name="hora_inicio_funcion"
+        #hora_inicio_funcion="ngModel"
+        required
+      />
+      <div
+        *ngIf="hora_inicio_funcion.invalid && hora_inicio_funcion.touched"
+        class="text-danger"
+      >
+        Por favor, selecciona una hora.
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="loading" class="spinner-border text-primary" role="status">
+    <span class="visually-hidden">Loading...</span>
+  </div>
+
+  <button
+    type="submit"
+    class="btn btn-dark mt-3"
+    [disabled]="addShowtimeForm.invalid || loading"
+  >
+    Guardar
+  </button>
+</form>

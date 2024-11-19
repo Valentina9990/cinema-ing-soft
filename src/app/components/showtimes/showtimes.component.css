@@ -1,0 +1,10 @@
+.card-hover-effect {
+    transition: all 0.3s ease;
+  }
+  
+  .card-hover-effect:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+    filter: grayscale(50%);
+    cursor: pointer;
+  }
+  

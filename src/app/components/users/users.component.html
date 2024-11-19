@@ -1,6 +1,127 @@
 <div class="d-flex justify-content-center">
   <div class="col-md-9">
     <h5 class="mt-2">Usuarios</h5>
+    <button class="btn btn-primary mt-4 add-user-icon" (click)="openUserForm()">
+      <i class="bi bi-person-plus"></i>
+    </button>
+
+    @if (isUserFormOpen) {
+    <div class="overlay">
+      <div class="user-form-container" (click)="$event.stopPropagation()">
+        <form (ngSubmit)="addUser()">
+          <div class="form-group">
+            <label for="nombreUsuario">Nombre</label>
+            <input
+              type="text"
+              id="nombreUsuario"
+              class="form-control"
+              [(ngModel)]="newUser.nombre_usuario"
+              name="nombreUsuario"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="apellidoUsuario">Apellido</label>
+            <input
+              type="text"
+              id="apellidoUsuario"
+              class="form-control"
+              [(ngModel)]="newUser.apellido_usuario"
+              name="apellidoUsuario"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="emailUsuario">Correo electrónico</label>
+            <input
+              type="email"
+              id="emailUsuario"
+              class="form-control"
+              [(ngModel)]="newUser.email_usuario"
+              name="emailUsuario"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="contrasenaUsuario">Contraseña</label>
+            <input
+              type="password"
+              id="contrasenaUsuario"
+              class="form-control"
+              [(ngModel)]="newUser.contrasena_usuario"
+              name="contrasenaUsuario"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="fechaNacimientoUsuario">Fecha de nacimiento</label>
+            <input
+              type="date"
+              id="fechaNacimientoUsuario"
+              class="form-control"
+              [(ngModel)]="newUser.fecha_nacimiento_usuario"
+              name="fechaNacimientoUsuario"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="idCine">Cine</label>
+            <select
+              id="idCine"
+              class="form-control"
+              [(ngModel)]="newUser.id_cine"
+              name="idCine"
+              required
+            >
+              @for (cine of cines; track cine[0]) {
+                <option [value]="getCinemaId(cine[0])">
+                  {{ cine[0] }}
+                </option>
+              }
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="idCargo">Cargo</label>
+            <select
+              id="idCargo"
+              class="form-control"
+              [(ngModel)]="newUser.id_cargo"
+              name="idCargo"
+              required
+            >
+              @for (cargo of cargos; track cargo[0]) {
+                <option [value]="getRoleId(cargo[0])">
+                  {{ cargo[0] }}
+                </option>
+              }
+            </select>
+          </div>
+          <div class="d-flex justify-content-evenly mb-3">
+            <button type="submit" class="btn btn-success mt-3 add-user-icon">
+              Crear Usuario
+            </button>
+            <button
+              type="button"
+              class="btn btn-secondary mt-3 cancel-button"
+              (click)="closeUserForm()"
+            >
+              Cancelar
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    } @if (errorMessage) {
+    <div class="alert alert-danger mt-2">
+      {{ errorMessage }}
+    </div>
+
+    } @if (successMessage) {
+    <div class="alert alert-success mt-2">
+      {{ successMessage }}
+    </div>
+    }
     <table class="table mt-4">
       <thead class="thead-dark">
         <tr>
@@ -9,25 +130,86 @@
           <th scope="col">Apellido</th>
           <th scope="col">Correo electrónico</th>
           <th scope="col">Fecha de creación</th>
+          <th scope="col">Acciones</th>
         </tr>
       </thead>
       <tbody>
-        @for (user of paginatedUsers; track user.idUsuario; let i = $index) {
-          <tr>
-            <th scope="row">{{ (page - 1) * pageSize + i + 1 }}</th>
-            <td>{{ user.nombreUsuario }}</td>
-            <td>{{ user.apellidoUsuario }}</td>
-            <td>{{ user.emailUsuario }}</td>
-            <td>{{ user.fechaCreacion | date:'dd/MM/yyyy' }}</td>
-          </tr>
+        @for (user of users; track user.idUsuario; let i = $index) {
+        <tr>
+          <th scope="row">{{ (page - 1) * pageSize + i + 1 }}</th>
+          <td>
+            @if (selectedUser.idUsuario === user.idUsuario) {
+            <input
+              type="text"
+              class="form-control"
+              [(ngModel)]="selectedUser.nombreUsuario"
+            />
+            } @else {
+            {{ user.nombreUsuario }}
+            }
+          </td>
+          <td>
+            @if (selectedUser.idUsuario === user.idUsuario) {
+            <input
+              type="text"
+              class="form-control"
+              [(ngModel)]="selectedUser.apellidoUsuario"
+            />
+            } @else {
+            {{ user.apellidoUsuario }}
+            }
+          </td>
+          <td>
+            @if (selectedUser.idUsuario === user.idUsuario) {
+            <input
+              type="email"
+              class="form-control"
+              [(ngModel)]="selectedUser.emailUsuario"
+            />
+            } @else {
+            {{ user.emailUsuario }}
+            }
+          </td>
+          <td>{{ user.fechaCreacion | date : "dd/MM/yyyy" }}</td>
+          <td>
+            @if (selectedUser.idUsuario === user.idUsuario) {
+            <button
+              class="btn btn-sm btn-success me-2"
+              (click)="saveChanges(selectedUser)"
+            >
+              <i class="bi bi-check"></i>
+            </button>
+            <button
+              class="btn btn-sm btn-secondary"
+              (click)="selectedUser = {}"
+            >
+              <i class="bi bi-x"></i>
+            </button>
+            } @else {
+            <button
+              class="btn btn-sm btn-primary me-2"
+              (click)="editUser(user)"
+              [ngClass]="{
+                'edit-icon-inactive': selectedUser.idUsuario !== user.idUsuario,
+                'edit-icon-active': selectedUser.idUsuario === user.idUsuario
+              }"
+            >
+              <i class="bi bi-pencil"></i>
+            </button>
+            <button
+              class="btn btn-sm btn-danger"
+              (click)="openDeleteModal(deleteModal, user.idUsuario)"
+            >
+              <i class="bi bi-trash"></i>
+            </button>
+            }
+          </td>
+        </tr>
         } @empty {
-          <tr>
-            <td colspan="5" class="text-center">No hay usuarios disponibles</td>
-          </tr>
+        <p>No hay usuarios registrados</p>
         }
       </tbody>
     </table>
-
     <div class="d-flex justify-content-center">
       <ngb-pagination
         [collectionSize]="totalUsers"
@@ -36,8 +218,39 @@
         (pageChange)="onPageChange($event)"
         [maxSize]="5"
         [rotate]="true"
-        [boundaryLinks]="true">
+        [boundaryLinks]="true"
+      >
       </ngb-pagination>
     </div>
   </div>
+  <ng-template #deleteModal let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title">Confirmar eliminación</h4>
+      <button
+        type="button"
+        class="btn-close"
+        aria-label="Close"
+        (click)="modal.dismiss('cancel')"
+      ></button>
+    </div>
+    <div class="modal-body">
+      <p>¿Está seguro que desea eliminar este usuario?</p>
+    </div>
+    <div class="modal-footer">
+      <button
+        type="button"
+        class="btn btn-danger"
+        (click)="modal.close('delete')"
+      >
+        Eliminar
+      </button>
+      <button
+        type="button"
+        class="btn btn-secondary"
+        (click)="modal.dismiss('cancel')"
+      >
+        Cancelar
+      </button>
+    </div>
+  </ng-template>
 </div>
