@@ -24,7 +24,9 @@ export class ShowtimesComponent {
 
   loadshowtimes(): void {
     this.movieService.getMovies().subscribe((data) => {
-      this.movies = data.filter((movie: Movie) => movie.funciones.length > 0);
+      this.movies = data
+      .filter((movie: Movie) => movie.funciones.length > 0)
+      .sort((a: Movie, b: Movie) => a.nombrePelicula.localeCompare(b.nombrePelicula));
     });
   }
 
