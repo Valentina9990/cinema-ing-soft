@@ -1,8 +1,8 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Movie } from '../../interfaces/movie';
 import { API_URL } from '../../utils/domains/URLs';
+import { Movie } from '../../interfaces/movie';
 
 @Injectable({
   providedIn: 'root',
@@ -16,40 +16,35 @@ export class MoviesService {
     const params = new HttpParams()
       .set('limit', limit.toString())
       .set('offset', offset.toString());
-
     return this.http.get<Movie[]>(this.baseUrl, { params });
   }
 
   getAllMovies(): Observable<Movie[]> {
-    return this.http.get<Movie[]>(`${this.baseUrl}/all`);
+    return this.http.get<Movie[]>(`${this.baseUrl}/getall`);
   }
 
   getMovie(idPelicula: number): Observable<Movie> {
-    return this.http.get<Movie>(`${this.baseUrl}/${idPelicula}`);
+    return this.http.get<Movie>(`${this.baseUrl}/get/${idPelicula}`);
   }
 
-
-  addMovie(movie: Partial<Movie>): Observable<Movie> {
-    return this.http.post<Movie>(this.baseUrl, movie);
+  addMovie(movie: Omit<Movie, 'idPelicula'>): Observable<Movie> {
+    return this.http.post<Movie>(`${this.baseUrl}/add`, movie);
   }
 
-
-
-  updateMovie(idPelicula: number, movie: Partial<Movie>): Observable<Movie> {
-    return this.http.put<Movie>(`${this.baseUrl}/${idPelicula}`, movie);
+  searchMovies(nombrePelicula: string): Observable<Movie[]> {
+    const encodedSearch = encodeURIComponent(nombrePelicula);
+    return this.http.get<Movie[]>(`${this.baseUrl}/search/${encodedSearch}`);
   }
 
-  searchMovies(search: string): Observable<Movie[]> {
-    const params = new HttpParams().set('search', search);
-
-    return this.http.get<Movie[]>(this.baseUrl, { params });
-  }
-
-  updateMovieById(idPelicula: number, movie: Partial<Movie>): Observable<Movie> {
-    return this.http.put<Movie>(`${this.baseUrl}/${idPelicula}`, movie);
+  updateMovie(movie: Movie): Observable<Movie> {
+    const movieToUpdate = {
+      ...movie,
+      idPelicula: movie.idPelicula,
+    };
+    return this.http.put<Movie>(`${this.baseUrl}/update`, movieToUpdate);
   }
 
   deleteMovieById(idPelicula: number): Observable<any> {
-    return this.http.delete(`${this.baseUrl}/${idPelicula}`);
+    return this.http.delete(`${this.baseUrl}/delete/${idPelicula}`);
   }
 }

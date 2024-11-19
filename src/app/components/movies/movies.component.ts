@@ -1,10 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Movie } from '../../interfaces/movie';
-import { Subject, Subscription } from 'rxjs';
+import { Subject, Subscription, debounceTime, distinctUntilChanged, finalize } from 'rxjs';
 import { MoviesService } from '../../services/api/movies.service';
 import { CommonModule } from '@angular/common';
 import { NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule } from '@angular/forms';
+import { Movie } from '../../interfaces/movie';
 
 @Component({
   selector: 'app-movies',
@@ -14,130 +14,160 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './movies.component.css',
 })
 export class MoviesComponent implements OnInit, OnDestroy {
-  subscriptions: Subscription[];
-  movies: Movie[];
-  newMovie: Partial<Movie>;
+  private subscriptions: Subscription[] = [];
+  private searchSubject = new Subject<string>();
+  
+  movies: Movie[] = [];
+  newMovie: Partial<Movie> = {};
   page = 1;
   pageSize = 15;
   totalMovies = 0;
-  isEditing = false;
-  isAdding = false;
-  currentMovieId: number | null = null;
-  searchSubject = new Subject<string>();
-  searchTerm: string = '';
+  searchTerm = '';
+  isLoading = false;
+  errorMessage = '';
 
   constructor(private moviesService: MoviesService) {
-    this.subscriptions = [];
-    this.movies = [];
-    this.newMovie = {};
+    const searchSubscription = this.searchSubject.pipe(
+      debounceTime(300),
+      distinctUntilChanged()
+    ).subscribe(term => {
+      this.performSearch(term);
+    });
+    this.subscriptions.push(searchSubscription);
   }
 
   ngOnInit(): void {
-    this.getAllMovies();
+    this.loadMovies();
   }
 
   ngOnDestroy(): void {
-    this.subscriptions.forEach((sub) => sub.unsubscribe());
+    this.subscriptions.forEach(sub => sub.unsubscribe());
+    this.searchSubject.complete();
   }
 
-  public getAllMovies(): void {
-    const moviesSub = this.moviesService.getAllMovies().subscribe({
-      next: (response: Movie[]) => {
-        this.movies = response;
-        this.totalMovies = response.length;
-        console.log('Users fetched successfully:', response);
-      },
-      error: (error) => {
-        console.error('Error fetching movies:', error);
-      },
+  loadMovies(): void {
+    this.isLoading = true;
+    this.errorMessage = '';
+    
+    const moviesSub = this.moviesService.getAllMovies()
+      .pipe(finalize(() => this.isLoading = false))
+      .subscribe({
+        next: (response: Movie[]) => {
+          this.movies = response;
+          this.totalMovies = response.length;
+          console.log('Movies fetched successfully:', response);
+        },
+        error: (error) => {
+          this.errorMessage = 'Error al cargar las películas. Por favor, inténtelo de nuevo.';
+          console.error('Error fetching movies:', error);
+        }
     });
     this.subscriptions.push(moviesSub);
   }
 
-  confirmDelete(idMovie: number): void {
-    if (confirm('¿Estás seguro de que deseas eliminar esta película?')) {
-      this.deleteMovie(idMovie);
-    }
-  }
-
   addMovie(): void {
-    this.moviesService
-      .addMovie(this.newMovie as Omit<Movie, 'idPelicula'>)
+    if (!this.validateMovie(this.newMovie)) return;
+
+    this.isLoading = true;
+    this.errorMessage = '';
+
+    const addSub = this.moviesService.addMovie(this.newMovie as Omit<Movie, 'idPelicula'>)
+      .pipe(finalize(() => this.isLoading = false))
       .subscribe({
-        next: (createdMovie) => {
-          this.movies.push(createdMovie);
-          this.isAdding = false;
-          this.newMovie = {};
-          console.log('Movie added successfully:', createdMovie);
+        next: (createdMovie: Movie) => {
+          this.movies = [...this.movies, createdMovie];
+          this.totalMovies = this.movies.length;
+          this.resetForm();
+          alert('Película añadida correctamente');
         },
         error: (error) => {
-          console.error('Error adding user:', error);
-        },
-      });
+          this.errorMessage = 'Error al añadir la película. Por favor, inténtelo de nuevo.';
+          console.error('Error adding movie:', error);
+        }
+    });
+    this.subscriptions.push(addSub);
   }
 
-  updateMovie(idMovie: number): void {
-    const updatedUser = this.newMovie as Omit<Movie, 'idPelicula'>;
-    this.moviesService.updateMovieById(idMovie, updatedUser).subscribe({
-      next: (user) => {
-        const index = this.movies.findIndex(
-          (p) => p.idPelicula === user.idPelicula
-        );
-        if (index !== -1) {
-          this.movies[index] = user;
+  updateMovie(movie: Movie): void {
+    if (!this.validateMovie(movie)) return;
+
+    this.isLoading = true;
+    this.errorMessage = '';
+
+    const updateSub = this.moviesService.updateMovie(movie)
+      .pipe(finalize(() => this.isLoading = false))
+      .subscribe({
+        next: (updatedMovie) => {
+          this.movies = this.movies.map(m => 
+            m.idPelicula === updatedMovie.idPelicula ? updatedMovie : m
+          );
+          this.resetForm();
+          alert('Película actualizada correctamente');
+        },
+        error: (error) => {
+          this.errorMessage = 'Error al actualizar la película. Por favor, inténtelo de nuevo.';
+          console.error('Error updating movie:', error);
         }
-        this.isEditing = false;
-        this.newMovie = {};
-        console.log('Movie updated successfully:', user);
-      },
-      error: (error) => {
-        console.error('Error updating user:', error);
-      },
     });
+    this.subscriptions.push(updateSub);
   }
 
   deleteMovie(idMovie: number): void {
-    this.moviesService.deleteMovieById(idMovie).subscribe({
-      next: () => {
-        this.movies = this.movies.filter((u) => u.idPelicula !== idMovie);
-        console.log(`Movie with ID ${idMovie} deleted successfully`);
-      },
-      error: (error) => {
-        console.error('Error deleting user:', error);
-      },
+    if (!confirm('¿Está seguro de que desea eliminar esta película?')) return;
+
+    this.isLoading = true;
+    this.errorMessage = '';
+
+    const deleteSub = this.moviesService.deleteMovieById(idMovie)
+      .pipe(finalize(() => this.isLoading = false))
+      .subscribe({
+        next: () => {
+          this.movies = this.movies.filter(m => m.idPelicula !== idMovie);
+          this.totalMovies = this.movies.length;
+          alert('Película eliminada correctamente');
+        },
+        error: (error) => {
+          this.errorMessage = 'Error al eliminar la película. Por favor, inténtelo de nuevo.';
+          console.error('Error deleting movie:', error);
+        }
     });
+    this.subscriptions.push(deleteSub);
   }
 
-  searchMovies(search: string): void {
-    this.moviesService.searchMovies(search).subscribe({
-      next: ()=>{
-        this.movies = this.movies.filter((u) => u.nombrePelicula === search);
-        console.log(`Movie with title ${search} found successfully`);
-      }, error: (error) => {
-        console.error('No existe la pelicula:', error);
-      }
+  onSearchChange(term: string): void {
+    this.searchSubject.next(term);
+  }
+
+  private performSearch(term: string): void {
+    if (!term.trim()) {
+      this.loadMovies();
+      return;
+    }
+
+    this.isLoading = true;
+    this.errorMessage = '';
+
+    const searchSub = this.moviesService.searchMovies(term)
+      .pipe(finalize(() => this.isLoading = false))
+      .subscribe({
+        next: (results) => {
+          this.movies = results;
+          this.totalMovies = results.length;
+        },
+        error: (error) => {
+          this.errorMessage = 'Error en la búsqueda. Por favor, inténtelo de nuevo.';
+          console.error('Error searching movies:', error);
+        }
     });
+    this.subscriptions.push(searchSub);
   }
 
-  showAddMovieForm(): void {
-    this.isAdding = true;
-    this.isEditing = false;
-    this.newMovie = {};
-  }
-
-
-  startEditing(movie: Movie): void {
-    this.isEditing = true;
-    this.isAdding = false;
-    this.currentMovieId = movie.idPelicula;
-    this.newMovie = { ...movie };
-  }
-
-
-  cancelEditing(): void {
-    this.isEditing = false;
-    this.isAdding = false;
-    this.newMovie = {};
+  private validateMovie(movie: Partial<Movie>): boolean {
+    if (!movie.nombrePelicula?.trim()) {
+      this.errorMessage = 'El nombre de la película es requerido';
+      return false;
+    }
+    return true;
   }
 
   get paginatedMovies(): Movie[] {
@@ -150,13 +180,25 @@ export class MoviesComponent implements OnInit, OnDestroy {
     this.page = page;
   }
 
-
-  onSearch(term: string): void {
-    this.searchSubject.next(term);
+  trackByMovieId(index: number, movie: Movie): number {
+    return movie.idPelicula;
   }
 
-  clearSearch(): void {
-    this.searchTerm = '';
-    this.searchSubject.next('');
+  editMovie(movie: Movie): void {
+    this.newMovie = { ...movie };
+    this.errorMessage = '';
+  }
+
+  onSubmit(): void {
+    if (this.newMovie.idPelicula) {
+      this.updateMovie(this.newMovie as Movie);
+    } else {
+      this.addMovie();
+    }
+  }
+
+  resetForm(): void {
+    this.newMovie = {};
+    this.errorMessage = '';
   }
 }

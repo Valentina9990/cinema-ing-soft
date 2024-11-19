@@ -1,141 +1,312 @@
-<div class="container">
-  <!-- Botón para agregar una nueva película -->
-  <div class="row mb-4 mt-3">
-    <div class="col-12 text-center mb-3">
-      <h1 class="mb-4">Películas</h1>
+<div class="container mt-4">
+  <h1 class="text-center mb-4">Películas</h1>
+
+  <!-- Loading Spinner -->
+  <div *ngIf="isLoading" class="text-center my-3">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Cargando...</span>
     </div>
-    <div class="col-12 col-md-8 mx-auto">
-      <div class="input-group mb-3">
-        <span class="input-group-text">
-          <i class="bi bi-search"></i>
-        </span>
-        <input
-          type="text"
-          class="form-control"
-          placeholder="Buscar películas..."
-          [(ngModel)]="searchTerm"
-          (ngModelChange)="onSearch($event)"
-          name="search"
-        />
-        <button
-          class="btn btn-outline-secondary"
-          type="button"
-          (click)="clearSearch()"
-          *ngIf="searchTerm"
-        >
-          <i class="bi bi-x-lg"></i>
-        </button>
-      </div>
-    </div>
+  </div>
+
+  <div
+    *ngIf="errorMessage"
+    class="alert alert-danger alert-dismissible fade show"
+    role="alert"
+  >
+    {{ errorMessage }}
+    <button
+      type="button"
+      class="btn-close"
+      (click)="errorMessage = ''"
+      aria-label="Cerrar"
+    ></button>
   </div>
 
   <div class="row mb-4">
-    <div class="col-12 d-flex justify-content-between align-items-center">
-      <div>
-        <span class="text-muted">Total: {{ totalMovies }} películas</span>
-      </div>
-      <button class="btn btn-primary" (click)="showAddMovieForm()">
-        <i class="bi bi-plus-lg me-2"></i>Agregar Película
+    <div class="col-md-8">
+      <label for="searchInput" class="visually-hidden">Buscar película</label>
+      <input
+        type="text"
+        id="searchInput"
+        class="form-control"
+        placeholder="Buscar película por nombre"
+        [(ngModel)]="searchTerm"
+        (ngModelChange)="onSearchChange($event)"
+        [disabled]="isLoading"
+      />
+    </div>
+    <div class="col-md-4 text-end">
+      <button
+        class="btn btn-primary"
+        (click)="onSearchChange(searchTerm)"
+        [disabled]="isLoading"
+        aria-label="Buscar películas"
+      >
+        <i class="bi bi-search me-1"></i>Buscar
       </button>
     </div>
   </div>
 
-
-  <div *ngIf="isEditing || isAdding" class="mb-4">
-    <h5>{{ isEditing ? "Modificar Película" : "Agregar Película" }}</h5>
-    <form (ngSubmit)="isEditing ? updateMovie(currentMovieId!) : addMovie()">
-      <div class="mb-3">
-        <label for="nombrePelicula" class="form-label">Nombre</label>
-        <input
-          type="text"
-          id="nombrePelicula"
-          [(ngModel)]="newMovie.nombrePelicula"
-          name="nombrePelicula"
-          class="form-control"
-          required
-        />
-      </div>
-      <div class="mb-3">
-        <label for="sinopsisPelicula" class="form-label">Sinopsis</label>
-        <textarea
-          id="sinopsisPelicula"
-          [(ngModel)]="newMovie.sinopsisPelicula"
-          name="sinopsisPelicula"
-          class="form-control"
-          required
-        ></textarea>
-      </div>
-      <div class="mb-3">
-        <label for="duracionPelicula" class="form-label">Duración (mins)</label>
-        <input
-          type="number"
-          id="duracionPelicula"
-          [(ngModel)]="newMovie.duracionPelicula"
-          name="duracionPelicula"
-          class="form-control"
-          required
-        />
-      </div>
-      <button type="submit" class="btn btn-success">
-        {{ isEditing ? "Guardar Cambios" : "Agregar" }}
-      </button>
-      <button type="button" class="btn btn-secondary" (click)="cancelEditing()">
-        Cancelar
-      </button>
-    </form>
+  <div class="table-responsive">
+    <table class="table table-striped table-bordered">
+      <thead class="table-dark">
+        <tr>
+          <th scope="col">ID</th>
+          <th scope="col">Nombre</th>
+          <th scope="col">Portada</th>
+          <th scope="col">Género ID</th>
+          <th scope="col">Duración</th>
+          <th scope="col">Idioma</th>
+          <th scope="col">Sinopsis</th>
+          <th scope="col">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container
+          *ngIf="!isLoading && paginatedMovies.length > 0; else noMovies"
+        >
+          <tr *ngFor="let movie of paginatedMovies; trackBy: trackByMovieId">
+            <th scope="row">{{ movie.idPelicula }}</th>
+            <td>{{ movie.nombrePelicula }}</td>
+            <td>
+              <img
+                [src]="movie.thumbnail"
+                [alt]="'Portada de ' + movie.nombrePelicula"
+                class="img-thumbnail"
+                width="100"
+                height="150"
+                loading="lazy
+                "
+              />
+            </td>
+            <td>{{ movie.idGenero }}</td>
+            <td>{{ movie.duracionPelicula }} min</td>
+            <td>{{ movie.idioma }}</td>
+            <td
+              class="text-truncate"
+              style="max-width: 200px"
+              [title]="movie.sinopsisPelicula"
+            >
+              {{ movie.sinopsisPelicula }}
+            </td>
+            <td>
+              <div class="btn-group" role="group">
+                <button
+                  class="btn btn-warning btn-sm"
+                  (click)="editMovie(movie)"
+                  [disabled]="isLoading"
+                  aria-label="Editar película"
+                >
+                  <i class="bi bi-pencil-fill" aria-hidden="true"></i>
+                </button>
+                <button
+                  class="btn btn-danger btn-sm"
+                  (click)="deleteMovie(movie.idPelicula)"
+                  [disabled]="isLoading"
+                  aria-label="Eliminar película"
+                >
+                  <i class="bi bi-trash3-fill" aria-hidden="true"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </ng-container>
+        <ng-template #noMovies>
+          <tr>
+            <td colspan="8" class="text-center py-4">
+              <i class="bi bi-film me-2"></i>
+              {{
+                isLoading
+                  ? "Cargando películas..."
+                  : "No hay películas disponibles"
+              }}
+            </td>
+          </tr>
+        </ng-template>
+      </tbody>
+    </table>
   </div>
 
+  <div
+    class="d-flex justify-content-center mt-3"
+    *ngIf="totalMovies > pageSize"
+  >
+    <ngb-pagination
+      [collectionSize]="totalMovies"
+      [(page)]="page"
+      [pageSize]="pageSize"
+      (pageChange)="onPageChange($event)"
+      [maxSize]="5"
+      [rotate]="true"
+      [boundaryLinks]="true"
+      [disabled]="isLoading"
+      aria-label="Navegación de páginas"
+    >
+    </ngb-pagination>
+  </div>
 
-  <div class="row row-cols-2 row-cols-md-4 g-4">
-    <div class="col" *ngFor="let movie of paginatedMovies">
-      <div class="card h-100">
-        <img
-          [src]="movie.thumbnail"
-          class="card-img-top"
-          [alt]="movie.nombrePelicula"
-        />
-        <div class="card-body">
-          <h5 class="card-title">{{ movie.nombrePelicula }}</h5>
-          <p class="card-text">{{ movie.sinopsisPelicula }}</p>
-          <p class="card-text">
-            <small class="text-muted"
-              >Duración: {{ movie.duracionPelicula }} mins</small
-            ><br />
-            <small class="text-muted">Idioma: {{ movie.idioma }}</small>
-          </p>
-
-
-          <div class="d-flex justify-content-between">
-            <button
-              class="btn btn-warning btn-sm"
-              (click)="startEditing(movie)"
-            >
-              Modificar
-            </button>
-            <button
-              class="btn btn-danger btn-sm"
-              (click)="confirmDelete(movie.idPelicula)"
-            >
-              Eliminar
-            </button>
+  <div class="card mt-4">
+    <div class="card-header bg-primary text-white">
+      <h2 class="h5 mb-0">
+        <i
+          class="bi"
+          [ngClass]="
+            newMovie.idPelicula ? 'bi-pencil-square' : 'bi-plus-circle'
+          "
+        ></i>
+        {{ newMovie.idPelicula ? "Editar Película" : "Agregar Película" }}
+      </h2>
+    </div>
+    <div class="card-body">
+      <form (ngSubmit)="onSubmit()" #movieForm="ngForm">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label for="nombrePelicula" class="form-label">Nombre *</label>
+              <input
+                id="nombrePelicula"
+                type="text"
+                class="form-control"
+                [(ngModel)]="newMovie.nombrePelicula"
+                name="nombrePelicula"
+                required
+                #nombre="ngModel"
+                [class.is-invalid]="nombre.invalid && nombre.touched"
+              />
+              <div
+                class="invalid-feedback"
+                *ngIf="nombre.invalid && nombre.touched"
+              >
+                El nombre de la película es requerido
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="idGenero" class="form-label">ID Género *</label>
+              <input
+                id="idGenero"
+                type="number"
+                class="form-control"
+                [(ngModel)]="newMovie.idGenero"
+                name="idGenero"
+                required
+                min="1"
+                #genero="ngModel"
+                [class.is-invalid]="genero.invalid && genero.touched"
+              />
+              <div
+                class="invalid-feedback"
+                *ngIf="genero.invalid && genero.touched"
+              >
+                El ID del género es requerido y debe ser mayor a 0
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="duracionPelicula" class="form-label"
+                >Duración (minutos) *</label
+              >
+              <input
+                id="duracionPelicula"
+                type="number"
+                class="form-control"
+                [(ngModel)]="newMovie.duracionPelicula"
+                name="duracionPelicula"
+                required
+                min="1"
+                #duracion="ngModel"
+                [class.is-invalid]="duracion.invalid && duracion.touched"
+              />
+              <div
+                class="invalid-feedback"
+                *ngIf="duracion.invalid && duracion.touched"
+              >
+                La duración es requerida y debe ser mayor a 0
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label for="idioma" class="form-label">Idioma *</label>
+              <input
+                id="idioma"
+                type="text"
+                class="form-control"
+                [(ngModel)]="newMovie.idioma"
+                name="idioma"
+                required
+                #idioma="ngModel"
+                [class.is-invalid]="idioma.invalid && idioma.touched"
+              />
+              <div
+                class="invalid-feedback"
+                *ngIf="idioma.invalid && idioma.touched"
+              >
+                El idioma es requerido
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="thumbnail" class="form-label"
+                >URL de la portada *</label
+              >
+              <input
+                id="thumbnail"
+                type="url"
+                class="form-control"
+                [(ngModel)]="newMovie.thumbnail"
+                name="thumbnail"
+                required
+                #thumbnail="ngModel"
+                [class.is-invalid]="thumbnail.invalid && thumbnail.touched"
+              />
+              <div
+                class="invalid-feedback"
+                *ngIf="thumbnail.invalid && thumbnail.touched"
+              >
+                La URL de la portada es requerida y debe ser válida
+              </div>
+            </div>
           </div>
         </div>
-      </div>
+        <div class="mb-3">
+          <label for="sinopsisPelicula" class="form-label">Sinopsis *</label>
+          <textarea
+            id="sinopsisPelicula"
+            class="form-control"
+            [(ngModel)]="newMovie.sinopsisPelicula"
+            name="sinopsisPelicula"
+            rows="3"
+            required
+            #sinopsis="ngModel"
+            [class.is-invalid]="sinopsis.invalid && sinopsis.touched"
+          ></textarea>
+          <div
+            class="invalid-feedback"
+            *ngIf="sinopsis.invalid && sinopsis.touched"
+          >
+            La sinopsis es requerida
+          </div>
+        </div>
+        <div class="d-flex justify-content-between mt-4">
+          <button
+            type="submit"
+            class="btn btn-success"
+            [disabled]="movieForm.invalid || isLoading"
+          >
+            <i
+              class="bi"
+              [ngClass]="newMovie.idPelicula ? 'bi-save' : 'bi-plus-lg'"
+            ></i>
+            {{ newMovie.idPelicula ? "Actualizar" : "Agregar" }}
+          </button>
+          <button
+            type="button"
+            class="btn btn-secondary"
+            (click)="resetForm()"
+            [disabled]="isLoading"
+          >
+            <i class="bi bi-x-circle"></i> Cancelar
+          </button>
+        </div>
+      </form>
     </div>
   </div>
-
-</div>
-
-
-<div class="d-flex justify-content-center">
-  <ngb-pagination
-    [collectionSize]="totalMovies"
-    [(page)]="page"
-    [pageSize]="pageSize"
-    (pageChange)="onPageChange($event)"
-    [maxSize]="5"
-    [rotate]="true"
-    [boundaryLinks]="true"
-  >
-  </ngb-pagination>
 </div>
