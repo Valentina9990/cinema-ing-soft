@@ -3,9 +3,10 @@ import { UserService } from '../../services/api/user.service';
 import { Subscription } from 'rxjs';
 import { User } from '../../core/models/User.model';
 import { CommonModule } from '@angular/common';
-import { NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
 import { UsersResponse } from '../../core/models/UsersResponse.model';
 import { FormsModule } from '@angular/forms';
+import { Cargo, Cine } from '../../core/enums/enums';
 
 @Component({
   selector: 'app-users',
@@ -18,14 +19,18 @@ export class UsersComponent implements OnInit, OnDestroy {
   subscriptions: Subscription[] = [];
   users: User[] = [];
   page = 1;
-  pageSize = 30;
+  pageSize = 10;
   totalUsers = 0;
   selectedUser: any = {};
   errorMessage: string = '';
   successMessage: string = '';
   newUser: any = {};
   isUserFormOpen = false;
-  constructor(private userService: UserService) { }
+  cines = Object.entries(Cine).filter(([key]) => isNaN(Number(key)));
+  cargos = Object.entries(Cargo).filter(([key]) => isNaN(Number(key)));
+  userToDelete: number | null = null; 
+
+  constructor(private userService: UserService, private modalService: NgbModal) { }
 
   ngOnInit(): void {
     this.getUsers();
@@ -61,19 +66,11 @@ export class UsersComponent implements OnInit, OnDestroy {
   addUser(): void {
     this.userService.addUser(this.newUser).subscribe({
       next: (response) => {
-        this.successMessage = '¡Usuario agregado con éxito!';
-        setTimeout(() => {
-          this.successMessage = '';
-        }, 2000);
+        this.handleSuccess('¡Usuario agregado con éxito!');
         this.getUsers();
         this.closeUserForm();
       },
-      error: (error) => {
-        this.errorMessage = error.error.respuesta || 'Error al crear el usuario';
-        setTimeout(() => {
-          this.errorMessage = '';
-        }, 2000);
-      },
+      error: (error) => this.handleError(error, 'Error al crear el usuario'),
     });
   }
 
@@ -90,25 +87,29 @@ export class UsersComponent implements OnInit, OnDestroy {
     this.selectedUser = { ...user };
   }
 
-  deleteUser(idUsuario: number): void {
-    if (confirm('¿Está seguro que desea eliminar este usuario?')) {
-      this.userService.deleteUser(idUsuario).subscribe({
+  openDeleteModal(content: any, idUsuario: number) {
+    this.userToDelete = idUsuario;
+    this.modalService.open(content, { centered: true }).result.then(
+      (result) => {
+        if (result === 'delete') {
+          this.confirmDelete();
+        }
+        this.userToDelete = null;
+      },
+      (reason) => {
+        this.userToDelete = null;
+      }
+    );
+  }
+
+  confirmDelete(): void {
+    if (this.userToDelete) {
+      this.userService.deleteUser(this.userToDelete).subscribe({
         next: () => {
           this.getUsers();
-          this.errorMessage = '';
-          this.successMessage = '¡Usuario eliminado con éxito!';
-          setTimeout(() => {
-            this.successMessage = '';
-          }, 2000);
+          this.handleSuccess('¡Usuario eliminado con éxito!');
         },
-        error: (error) => {
-          console.error('Error deleting user:', error);
-          this.errorMessage =
-            error.error.respuesta || 'Error al actualizar el usuario';
-          setTimeout(() => {
-            this.errorMessage = '';
-          }, 2000);
-        },
+        error: (error) => this.handleError(error, 'Error al eliminar el usuario'),
       });
     }
   }
@@ -130,21 +131,27 @@ export class UsersComponent implements OnInit, OnDestroy {
       next: () => {
         this.getUsers();
         this.selectedUser = {};
-        this.errorMessage = '';
-        this.successMessage = '¡Usuario modificado con éxito!';
-          setTimeout(() => {
-            this.successMessage = '';
-          }, 2000);
+        this.handleSuccess('¡Usuario modificado con éxito!');
       },
-      error: (error) => {
-        console.error('Error updating user:', error);
-        this.errorMessage =
-          error.error.respuesta || 'Error al actualizar el usuario';
-          setTimeout(() => {
-            this.errorMessage = '';
-          }, 2000);
-      },
+      error: (error) => this.handleError(error, 'Error al modificar el usuario'),
     });
   }
+
+  getCinemaId(name: string): number {
+    return Cine[name as keyof typeof Cine];
+  }
+
+  getRoleId(name: string): number {
+    return Cargo[name as keyof typeof Cargo];
+  }
   
+  private handleSuccess(message: string): void {
+    this.successMessage = message;
+    setTimeout(() => (this.successMessage = ''), 2000);
+  }
+  
+  private handleError(error: any, defaultMessage: string): void {
+    this.errorMessage = error.error?.respuesta || defaultMessage;
+    setTimeout(() => (this.errorMessage = ''), 2000);
+  }
 }

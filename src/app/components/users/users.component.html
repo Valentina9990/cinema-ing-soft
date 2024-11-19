@@ -65,26 +65,36 @@
             />
           </div>
           <div class="form-group">
-            <label for="idCine">Cine (ID)</label>
-            <input
-              type="number"
+            <label for="idCine">Cine</label>
+            <select
               id="idCine"
               class="form-control"
               [(ngModel)]="newUser.id_cine"
               name="idCine"
               required
-            />
+            >
+              @for (cine of cines; track cine[0]) {
+                <option [value]="getCinemaId(cine[0])">
+                  {{ cine[0] }}
+                </option>
+              }
+            </select>
           </div>
           <div class="form-group">
-            <label for="idCargo">Cargo (ID)</label>
-            <input
-              type="number"
+            <label for="idCargo">Cargo</label>
+            <select
               id="idCargo"
               class="form-control"
               [(ngModel)]="newUser.id_cargo"
               name="idCargo"
               required
-            />
+            >
+              @for (cargo of cargos; track cargo[0]) {
+                <option [value]="getRoleId(cargo[0])">
+                  {{ cargo[0] }}
+                </option>
+              }
+            </select>
           </div>
           <div class="d-flex justify-content-evenly mb-3">
             <button type="submit" class="btn btn-success mt-3 add-user-icon">
@@ -188,7 +198,7 @@
             </button>
             <button
               class="btn btn-sm btn-danger"
-              (click)="deleteUser(user.idUsuario)"
+              (click)="openDeleteModal(deleteModal, user.idUsuario)"
             >
               <i class="bi bi-trash"></i>
             </button>
@@ -196,9 +206,7 @@
           </td>
         </tr>
         } @empty {
-        <tr>
-          <td colspan="6" class="text-center">No hay usuarios disponibles</td>
-        </tr>
+        <p>No hay usuarios registrados</p>
         }
       </tbody>
     </table>
@@ -215,4 +223,34 @@
       </ngb-pagination>
     </div>
   </div>
+  <ng-template #deleteModal let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title">Confirmar eliminación</h4>
+      <button
+        type="button"
+        class="btn-close"
+        aria-label="Close"
+        (click)="modal.dismiss('cancel')"
+      ></button>
+    </div>
+    <div class="modal-body">
+      <p>¿Está seguro que desea eliminar este usuario?</p>
+    </div>
+    <div class="modal-footer">
+      <button
+        type="button"
+        class="btn btn-danger"
+        (click)="modal.close('delete')"
+      >
+        Eliminar
+      </button>
+      <button
+        type="button"
+        class="btn btn-secondary"
+        (click)="modal.dismiss('cancel')"
+      >
+        Cancelar
+      </button>
+    </div>
+  </ng-template>
 </div>
