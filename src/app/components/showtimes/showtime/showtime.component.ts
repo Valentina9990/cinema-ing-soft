@@ -1,11 +1,9 @@
 import { NgFor, NgIf } from '@angular/common';
 import { Component } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
-import { catchError, of } from 'rxjs';
-import { Movie } from '../../../interfaces/movie';
+import { MovieWithShowTimes } from '../../../interfaces/movieWithShowTimes';
 import { Show } from '../../../interfaces/show';
 import { DatePipe } from '../../../pipes/date.pipe';
-import { MovieService } from '../../../services/api/movie.service';
 import { ShowtimeService } from '../../../services/api/showtime.service';
 import { AddShowtimeComponent } from '../add-showtime/add-showtime.component';
 
@@ -19,7 +17,7 @@ declare const bootstrap: any;
   styleUrl: './showtime.component.css',
 })
 export class ShowtimeComponent {
-  movie: Movie | null = null;
+  movie: MovieWithShowTimes | null = null;
   errorMessage: string | null = null;
   successMessage: string | null = null;
   loading: boolean = false;
@@ -27,7 +25,6 @@ export class ShowtimeComponent {
 
   constructor(
     private route: ActivatedRoute,
-    private movieService: MovieService,
     private showtimeservice: ShowtimeService
   ) {}
 
@@ -40,7 +37,7 @@ export class ShowtimeComponent {
   }
 
   loadshowtime(movieId: number): void {
-    this.movieService.getMovie(movieId).subscribe((data) => {
+    this.showtimeservice.getMovie(movieId).subscribe((data) => {
       data.funciones.sort((a, b) => {
         const dateWithTimeA = new Date(
           `${a.fechaFuncion.split('T')[0]}T${a.horaInicioFuncion}`
@@ -63,20 +60,14 @@ export class ShowtimeComponent {
 
     this.showtimeservice
       .deleteShowtime(showtimeId)
-      .pipe(
-        catchError((response) => {
-          this.setErrorMessage(response.error.message);
-          return of(null);
-        })
-      )
-      .subscribe(() => {
-        this.movie = this.movie && {
-          ...this.movie,
-          funciones: this.movie.funciones.filter(
-            (funcion) => funcion.idFuncion !== showtimeId
-          ),
-        };
-        this.setSuccessMessage('Showtime deleted successfully');
+      .subscribe({
+        next: () => {
+          this.setSuccessMessage('Showtime deleted successfully');
+          this.loadshowtime(Number(this.movie!.idPelicula));
+        },
+        error: (error) => {
+          this.setErrorMessage('No se puede eliminar porque tiene reservas asociadas');
+        },
       });
     this.loading = false;
   }

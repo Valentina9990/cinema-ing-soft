@@ -1,8 +1,8 @@
 import { NgFor, SlicePipe } from '@angular/common';
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { Movie } from '../../interfaces/movie';
-import { MovieService } from '../../services/api/movie.service';
+import { MovieWithShowTimes as Movie, MovieWithShowTimes } from '../../interfaces/movieWithShowTimes';
+import { ShowtimeService } from '../../services/api/showtime.service';
 import { AddShowtimeComponent } from './add-showtime/add-showtime.component';
 
 declare const bootstrap: any;
@@ -16,17 +16,17 @@ declare const bootstrap: any;
 export class ShowtimesComponent {
   movies: Movie[] = [];
   
-  constructor(private movieService: MovieService) {}
+  constructor(private showtimeService: ShowtimeService) {}
 
   ngOnInit(): void {
     this.loadshowtimes();
   }
 
   loadshowtimes(): void {
-    this.movieService.getMovies().subscribe((data) => {
+    this.showtimeService.getMovies().subscribe((data) => {
       this.movies = data
-      .filter((movie: Movie) => movie.funciones.length > 0)
-      .sort((a: Movie, b: Movie) => a.nombrePelicula.localeCompare(b.nombrePelicula));
+      .filter((movie: MovieWithShowTimes) => movie.funciones.length > 0)
+      .sort((a: MovieWithShowTimes, b: MovieWithShowTimes) => a.nombrePelicula.localeCompare(b.nombrePelicula));
     });
   }
 

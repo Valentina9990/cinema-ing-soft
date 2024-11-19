@@ -23,4 +23,20 @@ export class MovieService {
   getMovie(id_pelicula: number): Observable<Movie> {
     return this.http.get<Movie>(`${this.baseUrl}/${id_pelicula}`);
   }
+
+  addMovie(movie: Partial<Movie>): Observable<Movie> {
+    return this.http.post<Movie>(this.baseUrl + '/add', movie);
+  }
+
+  updateMovie(movie: Partial<Movie>): Observable<Movie> {
+    return this.http.put<Movie>(`${this.baseUrl}`, movie);
+  }
+  
+  deleteMovieById(idMovie: number) {
+    return this.http.delete(`${this.baseUrl}/delete/${idMovie}`);
+  }
+
+  searchMovies(term: string) {
+    return this.http.get<Movie[]>(`${this.baseUrl}/search/${term}`);
+  }
 }

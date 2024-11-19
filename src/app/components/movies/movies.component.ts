@@ -1,10 +1,10 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subject, Subscription, debounceTime, distinctUntilChanged, finalize } from 'rxjs';
-import { MoviesService } from '../../services/api/movies.service';
 import { CommonModule } from '@angular/common';
-import { NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
+import { Subject, Subscription, debounceTime, distinctUntilChanged, finalize } from 'rxjs';
 import { Movie } from '../../interfaces/movie';
+import { MovieService } from '../../services/api/movie.service';
 
 @Component({
   selector: 'app-movies',
@@ -26,7 +26,7 @@ export class MoviesComponent implements OnInit, OnDestroy {
   isLoading = false;
   errorMessage = '';
 
-  constructor(private moviesService: MoviesService) {
+  constructor(private moviesService: MovieService) {
     const searchSubscription = this.searchSubject.pipe(
       debounceTime(300),
       distinctUntilChanged()
@@ -49,7 +49,7 @@ export class MoviesComponent implements OnInit, OnDestroy {
     this.isLoading = true;
     this.errorMessage = '';
     
-    const moviesSub = this.moviesService.getAllMovies()
+    const moviesSub = this.moviesService.getMovies()
       .pipe(finalize(() => this.isLoading = false))
       .subscribe({
         next: (response: Movie[]) => {
