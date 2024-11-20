@@ -1,6 +1,6 @@
 export interface Cine {
   idCine:number;
-  idUbicacion:number;
+  nombreUbicacion: string;
   nombreCine:string;
   telefonoCine:string;
 
