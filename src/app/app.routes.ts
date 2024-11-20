@@ -11,7 +11,7 @@ import { LogoutComponent } from './core/logout/logout.component';
 export const routes: Routes = [
     {
         path: '',
-        component: CineComponent,
+        component: UsersComponent,
     },
     {
         path: 'logout',
