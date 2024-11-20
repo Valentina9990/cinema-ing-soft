@@ -139,3 +139,4 @@ export class CineComponent implements OnInit, OnDestroy {
     });
   }
 }
+
